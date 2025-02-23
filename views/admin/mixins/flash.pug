@@ -1,0 +1,15 @@
+mixin flashSuccess (time)
+    if (messages.success && messages.success.trim !== "")
+        .message.info
+            div(class="alert alert-success"
+                show-alert
+                data-time=time
+            ) #{messages.success} <span close-alert>x</span>
+
+mixin flashError(time)
+    if (messages.error && messages.error.trim !== "")
+        .message.info
+            div(class="alert alert-danger"
+                show-alert
+                data-time=time
+            ) #{messages.error} <span close-alert>x</span>
