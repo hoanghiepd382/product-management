@@ -18,14 +18,14 @@ database.connect();
 
 app.use(methodOverride('_method'));
 app.locals.prefixAdmin = systemConfig.prefixAdmin;
-app.set('views', './views');
+app.set('views', `${__dirname}/views`);
 app.set('view engine', 'pug');
 
 app.use(cookieParser('H123456789'));
 app.use(session({ cookie: { maxAge: 60000 }}));
 app.use(flash());
 
-app.use(express.static('public'));
+app.use(express.static(`${__dirname}/public`));
 app.use(bodyParser.urlencoded({ extended: false }));
 
 route(app);
