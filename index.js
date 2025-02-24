@@ -10,6 +10,7 @@ const session = require('express-session');
 
 
 require('dotenv').config();
+console.log(process.env.CLOUDINARY_CLOUD_NAME);
 
 const app = express();
 const port = process.env.PORT;
