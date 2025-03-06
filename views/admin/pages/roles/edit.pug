@@ -1,0 +1,41 @@
+extends ../../layouts/default.pug
+include ../../mixins/flash.pug
+
+block main 
+    +flashSuccess(5000)
+    +flashError(5000)
+
+    h1(class="mb-4") #{pageTitle}
+
+    if (role.permissions.includes("roles_edit"))
+        form(
+            action=`${prefixAdmin}/role/edit/${record.id}?_method=PATCH`
+            method="POST"
+        )
+            div(class="form-group")
+                label(for="title") Tên quyền
+                input(
+                    type="text"
+                    class="form-control"
+                    id="title"
+                    name="title"
+                    value=record.title
+                    required
+                ) 
+            div(class="form-group")
+                label(for="desc") Mô tả
+                input(
+                    type="text"
+                    class="form-control"
+                    id="desc"
+                    name="description"
+                    value=record.description
+                    required
+                )  
+            div(class="form-group")
+                button(
+                    type="submit"
+                    class="btn btn-primary"
+                ) Cập nhật
+
+    script(src="/admin/js/product.js")

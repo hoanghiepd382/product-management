@@ -1,0 +1,80 @@
+extends ../../layouts/default.pug
+
+block main 
+    h1(class="mb-4") #{pageTitle}
+
+    if (role.permissions.includes("account_view"))
+        .card.mb-3 
+            .card-header Danh sách 
+            .card-body 
+                .row 
+                    .col-8 
+                    .col-4.test-right 
+                        if (role.permissions.includes("account_create"))
+                            a(
+                                href=`${prefixAdmin}/account/create`
+                                class="btn btn-outline-success"
+                            ) + Thêm mới
+                
+                table(
+                    class="table table-hover table-sm"
+                )
+                    thead 
+                        tr 
+                            th STT 
+                            th Avatar
+                            th Họ tên
+                            th Phân quyền
+                            th Email
+                            th Trạng thái 
+                            th Hành động
+
+                    tbody 
+                        each items, index in records
+                            tr
+                                td #{index+1}                             
+                                td
+                                    img(
+                                        src=items.avatar
+                                        alt=items.fullName
+                                        width="100px"
+                                        height="auto"
+                                    )
+                                td #{items.fullName}
+                                td #{items.role.title}
+                                td #{items.email} 
+                                if (role.permissions.includes("product_view"))                        
+                                    td 
+                                        if(items.status == "active")
+                                            a(href="javascript:;"
+                                            button-change-status
+                                            data-status="active" 
+                                            class="badge badge-success"                          
+                                            ) Hoạt động
+                                        
+                                        else
+                                            a(href="javascript:;"
+                                            button-change-status
+                                            data-status="inactive" 
+                                            class="badge badge-danger"
+                                            ) Dừng hoạt động
+                                else 
+                                    span(
+                                        button-change-status 
+                                        data-status="active"
+                                        class="badge badge-success"
+                                    ) Hoạt động
+                                        
+                                td 
+                                    a(href=`${prefixAdmin}/account/detail/${items.id}`
+                                        class="btn btn-secondary btn-sm"                                  
+                                    ) Chi tiết
+                                    if (role.permissions.includes("account_edit"))
+                                        a(href=`${prefixAdmin}/account/edit/${items.id}`
+                                            class="btn btn-warning btn-sm"                                  
+                                        ) Sửa
+                                    if (role.permissions.includes("account_delete"))
+                                        button(class="btn btn-danger btn-sm ml-1"
+                                                data-item=items.id
+                                        ) Xóa
+
