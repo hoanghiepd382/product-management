@@ -1,19 +1,23 @@
 extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+include ../../mixins/product-layout.pug
 
 block main
-   .container.my-3
-    .row
-        .col-12 
-            .box-head
-                h2.inner-title Danh sách sản phẩm
+    .section-products-featured.my-5
+        .container
+            .row
+                .col-12 
+                    +box-head("Sản phẩm nổi bật")
 
-    .row 
-        .col-4.mb-3 
-            .product-item 
-                .inner-image
-                    img(src="https://cdn.tgdd.vn/Products/Images/42/114115/iphone-x-64gb-hh-600x600.jpg", alt="Iphone X")
-                    .inner-content
-                        h3.inner.title Iphone X 
-                        .inner-price-new 100$
-                        .inner-price-old 110$
-                        .inner-discount -9%
+            +product-grid(FeaturedProduct)
+
+    .section-products-featured.my-5
+        .container
+            .row
+                .col-12 
+                    +box-head("Sản phẩm mới nhất")
+
+            +product-grid(NewProduct)
+
+
+    

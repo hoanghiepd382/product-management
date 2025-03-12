@@ -1,0 +1,70 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+
+block main
+  .container.my-4
+    .order-success-container
+      .row 
+        .col-12 
+          +box-head("Đặt hàng thành công")
+
+      .row
+        .col-12 
+          div(class="success-alert")
+            i(class="fas fa-check-circle mr-2")
+            |Chúc mừng bạn đã đặt hàng thành công! Chúng tôi sẽ xử lý đơn hàng của bạn trong thời gian sớm nhất.
+               
+      .row 
+        .col-12 
+          h4(class="section-title") Thông tin cá nhân
+          table(class="info-table customer-info-table")
+            tbody
+              tr 
+                td Họ tên
+                td 
+                  b #{orderDetail.userInfo.fullName}
+              tr 
+                td Số điện thoại 
+                td  
+                  b #{orderDetail.userInfo.phone}
+              tr 
+                td Địa chỉ nhận hàng 
+                td  
+                  b #{orderDetail.userInfo.address}
+
+      .row 
+        .col-12 
+          h4(class="section-title") Thông tin đơn hàng
+          table(class="info-table")
+            thead 
+              tr 
+                th STT
+                th Ảnh
+                th Tên
+                th Giá
+                th Số lượng
+                th Tổng tiền
+            
+            tbody 
+              if (orderDetail.products.length>0)
+                each item, index in orderDetail.products 
+                  tr 
+                    td #{index+1}
+                    td 
+                      img(
+                        src=item.productInfo.thumbnail 
+                        alt=item.productInfo.title 
+                        width="80px"
+                        class="product-image"
+                      )
+                    td #{item.productInfo.title}
+                    td #{item.newPrice}
+                    td #{item.quantity}
+                    td #{item.totalPrice}$
+
+          if(orderDetail.products.length>0)
+            div(class="total-amount") Tổng đơn hàng: #{orderDetail.totalPrice}$
+
+          a(href="/product" class="action-button")
+            i(class="fas fa-shopping-cart mr-2")
+            | Tiếp tục mua sắm

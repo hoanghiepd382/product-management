@@ -7,8 +7,12 @@ html
         <link rel="stylesheet" href="/css/style.css">
     body 
         include ../partials/header.pug
+        include ../mixins/flash.pug
+
+        +flashSuccess(2000)
 
         block main
+
 
         include ../partials/footer.pug
 
