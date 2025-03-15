@@ -163,3 +163,23 @@ img[upload-preview] {
     background-color: #e0a800;
     border-color: #d39e00;
 }
+
+  /* Inline CSS để giới hạn độ rộng cột */
+  .table-fixed {
+    table-layout: fixed; /* Đảm bảo độ rộng cố định cho các cột */
+    width: 100%;
+}
+
+.table-fixed td,
+.table-fixed th {
+    word-wrap: break-word; /* Xuống dòng tự động */
+    word-break: break-word; /* Đảm bảo xuống dòng với từ dài */
+}
+
+td.title-column {
+    width: 200px; /* Độ rộng cột Tiêu đề */
+}
+
+td.description-column {
+    width: 300px; /* Độ rộng cột Nội dung tóm tắt */
+}

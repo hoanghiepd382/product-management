@@ -1,0 +1,70 @@
+extends ../../layouts/default.pug
+include ../../mixins/flash.pug
+  
+block main
+    +flashSuccess(3000)
+    +flashError(3000)
+    
+    h1(class="mb-4") #{pageTitle}
+    .card.mb-3
+        .card-header Danh sách
+        .card-body
+            .row
+                .col-8
+                .col-4.text-right
+                    a(
+                        href=`${prefixAdmin}/blog/create`
+                        class="btn btn-outline-success"
+                    ) + Thêm mới
+                        
+            table(
+                class="table table-hover table-sm table-fixed"
+            )
+                thead
+                    tr
+                        th(class="index-column") STT
+                        th Ảnh
+                        th Tiêu đề
+                        th Nội dung tóm tắt
+                        th Trạng thái
+                        th(class="action-column") Hành động
+                tbody
+                    each items, index in blog
+                        tr
+                            td(class="index-column") #{index+1}
+                            td
+                                img(
+                                    src=items.thumbnail
+                                    alt=items.title
+                                    width="100px"
+                                    height="auto"
+                                )
+                            td(class="title-column") #{items.title}
+                            td(class="description-column") !{items.description}
+                            td
+                                if(items.status == "display")
+                                    a(
+                                    href=`${prefixAdmin}/blog/status/${items.id}/${items.status}`
+                                    onclick="return confirm('Bạn có chắc chắn muốn thay đổi trạng thái bài viết này không?')"
+                                    class="badge badge-success"
+                                    ) Hiển thị
+                                else
+                                    a(href=`${prefixAdmin}/blog/status/${items.id}/${items.status}`
+                                    onclick="return confirm('Bạn có chắc chắn muốn thay đổi trạng thái bài viết này không?')"
+                                    class="badge badge-danger"
+                                    ) Không hiển thị
+                            td(class="action-column")
+                                a(href=`${prefixAdmin}/blog/detail/${items.id}`
+                                    class="btn btn-secondary btn-sm"
+                                    ) Chi tiết
+                                a(href=`${prefixAdmin}/blog/edit/${items.id}`
+                                    class="btn btn-warning btn-sm mx-1"
+                                    ) Sửa
+                                a(class="btn btn-danger btn-sm"
+                                    href=`${prefixAdmin}/blog/delete/${items.id}`
+                                    onclick="return confirm('Bạn có chắc chắn muốn xóa bài viết này không?')"
+                                ) Xóa
+                                
+    script(src="/admin/js/blog.js")
+
+    

@@ -4,11 +4,13 @@ include ../../mixins/select-tree.pug
 
 block main 
     +flashError(5000)
-    +flashSuccess(5000)
+    +flashSuccess(3000)
+
+
     h1(class="mb-4") #{pageTitle}
-    if (role.permissions.includes("product-category_view"))
+    if (role.permissions.includes("blog_view"))
         form(
-            action=`${prefixAdmin}/product/edit/${product.id}?_method=PATCH`
+            action=`${prefixAdmin}/blog/edit/${blog.id}?_method=PATCH`
             id="form-edit-product"
             method="POST"
             enctype="multipart/form-data"
@@ -20,19 +22,19 @@ block main
                     class="form-control"
                     id="title"
                     name="title"
+                    value=blog.title
                     required
-                    value=product.title
                 ) 
-            div(class="form-group")
-                label(for="product_category_id") Danh mục 
-                select(
-                    name="product_category_id"
-                    id="product_category_id"
-                    class="form-control"
-                ) 
-                    option(value="") -- Chọn danh mục  --
-                    if(records)
-                        +selectTree(records, 1, product.product_category_id)
+            //- div(class="form-group")
+            //-     label(for="produc_category_id") Danh mục 
+            //-     select(
+            //-         name="product_category_id"
+            //-         id="product_category_id"
+            //-         class="form-control"
+            //-     ) 
+            //-         option(value="") -- Chọn danh mục --
+            //-         if(records)
+            //-             +selectTree(records)
 
             div(class="form-group form-check form-check-inline")               
                 input(
@@ -41,7 +43,7 @@ block main
                     id="featured1"
                     class="form-check-input"
                     value="1"
-                    checked=(product.featured=="1")
+                    checked=(blog.featured=="1")
                 ) 
                 label(for="featured1" class="form-check-label") Nổi bật
             div(class="form-group form-check form-check-inline")               
@@ -51,48 +53,27 @@ block main
                     id="featured0"
                     class="form-check-input"
                     value="1"
-                    checked=(product.featured=="0")
+                    checked=(blog.featured=="0")
                 ) 
-                label(for="featured0" class="form-check-label") Không
+                label(for="featured0" class="form-check-label") Không                      
+            
             div(class="form-group")
                 label(for="desc") Mô tả
                 textarea(
                     class="form-control textarea-mce"
                     id="desc"
                     name="description"
-                    rows="5"  
-                ) !{product.description}
+                    rows="5"                   
+                ) !{blog.description}
             div(class="form-group")
-                label(for="price") Giá
-                input(
-                    type="number"
-                    class="form-control"
-                    id="price"
-                    name="price"
-                    value=product.price
-                    min="0"
-                )
-            div(class="form-group")
-                label(for="discount") % Giảm giá
-                input(
-                    type="number"
-                    class="form-control"
-                    id="discount"
-                    name="discountPercentage"
-                    value=product.discountPercentage
-                    min="0"  
-                    step="any" 
-                )
-            div(class="form-group")
-                label(for="stock") Số lượng
-                input(
-                    type="number"
-                    class="form-control"
-                    id="stock"
-                    name="stock"
-                    value=product.stock
-                    min="0"  
-                )
+                label(for="desc") Nội dung bài viết
+                textarea(
+                    class="form-control textarea-mce"
+                    id="desc"
+                    name="content"
+                    rows="5" 
+                ) !{blog.content}
+            
             div(class="form-group"
                 upload-image
             )
@@ -106,9 +87,9 @@ block main
                     upload-image-input              
                 )
                 div.image-preview-container
-                    img(src=product.thumbnail
+                    img(src=blog.thumbnail
                         upload-preview
-                        )
+                    )
                     span.delete-preview &times;
             div(class="form-group")
                 label(for="position") Vị trí
@@ -118,35 +99,35 @@ block main
                     id="position"
                     name="position"
                     placeholder="Tự động tăng"
-                    value=product.position
-                    min="1"           
+                    min="1" 
+                    value=blog.position          
                 )
             div(class="form-group form-check form-check-inline")
                 input(
                     type="radio"
                     class="form-check-input"
-                    id="statusActive"
+                    id="statusDisplay"
                     name="status"
-                    value="active"
-                    checked=(product.status === "active")
+                    value="display"
+                    checked=(blog.status=="display")
                 )
-                label(for="statusActive" class="form-check-label") Hoạt động 
+                label(for="statusDisplay" class="form-check-label") Hiển thị
             div(class="form-group form-check form-check-inline")
                 input(
                     type="radio"
                     class="form-check-input"
-                    id="statusInActive"
+                    id="statusHidden"
                     name="status"
-                    value="inactive" 
-                    checked=(product.status === "inactive")           
+                    value="hidden"   
+                    checked=(blog.status=="hidden")           
                 )
-                label(for="statusInActive" class="form-check-label") Dừng hoạt động
+                label(for="statusHidden" class="form-check-label") Không hiển thị
             div(class="form-group")
                 button(
                     type="submit"
                     class="btn btn-primary"              
-                ) Cập nhật
-    
+                ) Hoàn tất
+        
     script(src="/admin/js/product.js")
         
         

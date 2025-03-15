@@ -1,0 +1,118 @@
+extends ../../layouts/default.pug
+include ../../mixins/flash.pug
+include ../../mixins/select-tree.pug
+
+block main 
+    +flashError(5000)
+    +flashSuccess(3000)
+
+    h1(class="mb-4") #{pageTitle}
+    if (role.permissions.includes("blog_view"))
+        form(
+            action=`${prefixAdmin}/blog/create`
+            id="form-create-product"
+            method="POST"
+            enctype="multipart/form-data"
+        )
+            div(class="form-group")
+                label(for="title") Tiêu đề
+                input(
+                    type="text"
+                    class="form-control"
+                    id="title"
+                    name="title"
+                    required
+                ) 
+            //- div(class="form-group")
+            //-     label(for="produc_category_id") Danh mục 
+            //-     select(
+            //-         name="product_category_id"
+            //-         id="product_category_id"
+            //-         class="form-control"
+            //-     ) 
+            //-         option(value="") -- Chọn danh mục --
+            //-         if(records)
+            //-             +selectTree(records)
+
+            div(class="form-group form-check form-check-inline")               
+                input(
+                    type="radio"
+                    name="featured"
+                    id="featured1"
+                    class="form-check-input"
+                    value="1"
+                ) 
+            label(for="featured1" class="form-check-label") Nổi bật                       
+            
+            div(class="form-group")
+                label(for="desc") Mô tả
+                textarea(
+                    class="form-control textarea-mce"
+                    id="desc"
+                    name="description"
+                    rows="5"  
+                )
+            div(class="form-group")
+                label(for="desc") Nội dung bài viết
+                textarea(
+                    class="form-control textarea-mce"
+                    id="desc"
+                    name="content"
+                    rows="5"  
+                )
+            
+            div(class="form-group"
+                upload-image
+            )
+                label(for="thumbnail") Ảnh
+                input(
+                    type="file"
+                    class="form-control"
+                    id="thumbnail"
+                    name="thumbnail" 
+                    accept="image/*"
+                    upload-image-input              
+                )
+                div.image-preview-container
+                    img(src="" 
+                    upload-preview
+                    )
+                    span.delete-preview &times;
+            div(class="form-group")
+                label(for="position") Vị trí
+                input(
+                    type="number"
+                    class="form-control"
+                    id="position"
+                    name="position"
+                    placeholder="Tự động tăng"
+                    min="1"           
+                )
+            div(class="form-group form-check form-check-inline")
+                input(
+                    type="radio"
+                    class="form-check-input"
+                    id="statusDisplay"
+                    name="status"
+                    value="display"
+                    checked 
+                )
+                label(for="statusDisplay" class="form-check-label") Hiển thị
+            div(class="form-group form-check form-check-inline")
+                input(
+                    type="radio"
+                    class="form-check-input"
+                    id="statusHidden"
+                    name="status"
+                    value="hidden"              
+                )
+                label(for="statusHidden" class="form-check-label") Không hiển thị
+            div(class="form-group")
+                button(
+                    type="submit"
+                    class="btn btn-primary"              
+                ) Tạo mới
+        
+    script(src="/admin/js/product.js")
+        
+        

@@ -164,7 +164,6 @@ module.exports.resetPassword = (req, res) =>{
 }
 
 module.exports.resetPasswordPost = async (req, res) =>{
-   
     await User.updateOne(
         {
             tokenUser: req.cookies.tokenUser
@@ -173,4 +172,32 @@ module.exports.resetPasswordPost = async (req, res) =>{
         });
     req.flash("success", "Đổi mật khẩu thành công!");
     res.redirect("/");
+}
+
+module.exports.info = async (req, res) =>{
+    const user = await User.findOne({
+        tokenUser : req.cookies.tokenUser
+    }).select("-password");
+    res.render("client/pages/user/info", {
+        pageTitle: "Thông tin cá nhân",
+        user : user
+    });
+}
+
+module.exports.infoPatch = async (req, res) =>{
+    const user = await User.findOne({
+        tokenUser: req.cookies.tokenUser
+    });
+    const existEmail = await User.findOne({
+        email: req.body.email,
+        _id : {$ne: user.id}
+    });
+    if (existEmail){
+        req.flash("error", "Email đã tồn tại, vui lòng chọn email khác");
+        res.redirect("back");
+        return;
+    }
+    await User.updateOne({_id: user.id}, req.body);
+    req.flash("success", "Cập nhật thành công");
+    res.redirect("back");
 }

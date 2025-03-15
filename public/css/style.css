@@ -3,8 +3,8 @@
     padding: 10px 0;
 }
 
-.header.inner-logo img{
-    max-height: 50px;
+ .img-logo{
+    max-height: 150px;
     max-width: 100%;
 }
 
@@ -345,3 +345,127 @@
   .action-button:hover {
     background-color: #0056b3;
   }
+
+.avatar-small {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 8px; /* Thêm khoảng cách giữa avatar và tên */
+    vertical-align: middle; /* Căn giữa theo chiều dọc với text */
+}
+
+.image-preview-container {
+    position: relative;
+    display: inline-block;
+    margin-top: 15px;
+    display: none; /* Ẩn container mặc định */
+}
+
+/* Style cho ảnh preview */
+img[upload-preview] {
+    width: 150px;
+    height: auto;
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 5px;
+    display: block;
+}
+
+/* Style cho dấu "×" */
+.delete-preview {
+    position: absolute;
+    top: 0;
+    right: 0;
+    cursor: pointer;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    line-height: 1;
+}
+.chat {
+    background-color: #e5ddd5;
+    border-radius: 12px;
+    padding: 10px;
+    height: 500px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.inner-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.inner-incoming, .inner-outgoing {
+    max-width: 75%;
+    border-radius: 18px;
+    padding: 10px 15px;
+    margin-bottom: 5px;
+    word-wrap: break-word;
+}
+
+.inner-incoming {
+    background-color: #ffffff;
+    align-self: flex-start;
+    border: 1px solid #d3d3d3;
+}
+
+.inner-outgoing {
+    background-color: #ff69b4; /* Màu hồng cho tin nhắn gửi đi */
+    color: #ffffff;
+    align-self: flex-end;
+}
+
+.inner-name {
+    font-weight: bold;
+    margin-bottom: 3px;
+    color: #0084ff;
+}
+
+.inner-foot {
+    display: flex;
+    border-top: 1px solid #d3d3d3;
+    padding-top: 10px;
+}
+
+.inner-form {
+    display: flex;
+    width: 100%;
+    gap: 10px;
+}
+
+.inner-form input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #d3d3d3;
+    border-radius: 20px;
+    outline: none;
+}
+
+.inner-form button {
+    background-color: #ff69b4; /* Màu hồng cho nút gửi */
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    cursor: pointer;
+}
+
+.inner-form button i {
+    font-size: 18px;
+}
+

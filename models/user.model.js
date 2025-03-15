@@ -7,6 +7,8 @@ const userSchema = new mongoose.Schema({
     password: String,
     phone: String,
     avatar: String,
+    address: String,
+    birth: Date,
     deleted: {
         type: Boolean,
         default: false

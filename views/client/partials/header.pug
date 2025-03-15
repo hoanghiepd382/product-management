@@ -3,30 +3,33 @@ include ../mixins/sub-menu.pug
 header.header 
     .container
         .row.align-items-center
-            .col-3 
+            .col-2 
                 .inner-logo
                     a(href="/")
-                        img(src="/images/logo.svg", alt="Logo")
+                        img(src="/images/Gymlord.png", alt="Logo", class='img-logo')
 
-            .col-3
-                form(
-                    action="/search"
-                    method="GET"
-                )
-                    div(class="form-group d-flex mb-0")
-                        input(
-                            type="text"
-                            placehoder="Nhập từ khóa..."
-                            class="form-control"
-                            name="keyword"
-                            value=key
-                        )
-                        button(
-                            type="submit"
-                            class="btn btn-primary"
-                        ) Tìm
+            if(display)
+                .col-3
+                    form(
+                        action="/search"
+                        method="GET"
+                    )
+                        div(class="form-group d-flex mb-0")
+                            input(
+                                type="text"
+                                placehoder="Nhập từ khóa..."
+                                class="form-control"
+                                name="keyword"
+                                value=key
+                            )
+                            button(
+                                type="submit"
+                                class="btn btn-primary"
+                            ) Tìm
+            else 
+                .col-3
 
-            .col-5
+            .col-7
                 .inner-menu 
                     ul 
                         li 
@@ -39,6 +42,11 @@ header.header
                             a(href="/cart") Giỏ hàng (#{minicart? minicart.totalQuantity : 0})
                         
                         if(user)
+                            li 
+                                a(href="/chat") Chat
+                            li 
+                                img.avatar-small(src=user.avatar alt="avatar")
+                                a(href="/user/info") #{user.fullName}
                             li 
                                 a(href="/user/logout") Đăng xuất
                         else

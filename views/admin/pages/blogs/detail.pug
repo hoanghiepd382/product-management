@@ -1,0 +1,41 @@
+extends ../../layouts/default.pug
+include ../../mixins/moment.pug
+
+block main 
+    h1(class="mb-4") #{pageTitle}
+
+    if (blog.thumbnail)
+        img(src=blog.thumbnail width="150px" class="mb-3")
+    else 
+        img(src="/admin/images/avatar.png" width="150px" class="mb-3")
+
+    if (blog.title)
+        p Tiêu đề bài viết: <b>#{blog.title}</b>
+    if (blog.blog_category_id)
+        p Danh mục bài viết: <b>#{blog.blog_category_id}</b>
+
+    if (blog.description)
+        p Tóm tắt bài viết: <b>!{blog.description}</b>
+
+    if (blog.content)
+        p Nội dung bài viết: <b>!{blog.content}</b>
+
+    if (blog.writedBy.account_id)
+        p Người viết: <b>#{userWrited.fullName}</b>
+    if (blog.writedBy)
+       p Ngày viết: #[+formatDateTime(blog.writedBy.writedAt)]
+    if (blog.updatedBy)
+        - const updatedBy = blog.updatedBy.slice(-1)[0]
+        if(updatedBy)
+            p Cập nhật lần cuối: #[+formatDate(updatedBy.updateAt)] bởi <b>#{updatedBy.fullName}</b>
+            
+
+    p 
+        span Trạng thái: 
+        span 
+            <b>#{blog.status == "display"? "Hiển thị" : "Không hiển thị"}</b>
+
+    a(
+        href=`${prefixAdmin}/blog/edit`
+        class="btn btn-primary"
+    ) Chỉnh sửa thông tin

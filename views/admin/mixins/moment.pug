@@ -1,5 +1,5 @@
 mixin formatDateTime (datetime) 
-    span #{moment(time).format("DD/MM/YYYY HH:mm:ss")}
+    span #{moment(datetime).format("DD/MM/YYYY HH:mm:ss")}
 
 mixin formatDate (date) 
     span #{moment(date).format("DD/MM/YYYY")}

@@ -145,7 +145,7 @@ module.exports.deleteProduct = async (req, res)=>{
             }
         }
     );
-    req.flash('success', `Xóa sản phẩm thành công!!!`); 
+    req.flash('success', `Xóa sản phẩm thành công`); 
     res.redirect("back");
 }
 

@@ -1,9 +1,11 @@
 const Cart = require("../../models/cart.model");
 const Product = require("../../models/product.model");
 const Order = require("../../models/order.model");
+const User = require("../../models/user.model");
 const newPriceProductHelper = require("../../helpers/newPriceProduct");
 
 module.exports.index = async (req, res) =>{
+    const user = await User.findOne({tokenUser: req.cookies.tokenUser}).select("fullName phone address");
     const cart = await Cart.findOne({_id: req.cookies.cartId});
     if (cart.products.length > 0){
         for (const item of cart.products) {
@@ -21,7 +23,8 @@ module.exports.index = async (req, res) =>{
     }
     res.render("client/pages/checkout/index", {
         pageTitle: "Trang thanh toán",
-        cartDetail: cart
+        cartDetail: cart,
+        userBuy: user
     });
 }
 

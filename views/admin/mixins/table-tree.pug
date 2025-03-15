@@ -61,3 +61,68 @@ mixin tableTree(records, level=1)
 
         if items.children && items.children.length > 0
             +tableTree(items.children, level+1)
+
+
+mixin tableTreeBlog(records, level=1)
+    each items, index in records  
+        - const prefix = Array(level+1).join('--')
+        tr
+            td 
+                input(
+                    type="checkbox"
+                    name="id"
+                    value=items.id
+                )
+            td #{items.index}
+            td
+                img(
+                    src=items.thumbnail
+                    alt=items.title
+                    width="100px"
+                    height="auto"
+                )
+            td #{prefix}#{items.title}                       
+            td 
+                input(
+                    type="number"
+                    value=items.position 
+                    style="width: 60px"
+                    min="1"
+                    name="position"
+                )
+            if (role.permissions.includes("blog-category_edit"))
+                td 
+                    if items.status == "display"
+                        a(
+                            href="javascript:;"
+                            button-change-status
+                            data-status=items.status 
+                            data-id=items.id
+                            class="badge badge-success"
+                        ) Hiển thị
+                    else
+                        a(
+                            href="javascript:;"
+                            button-change-status
+                            data-status=items.status 
+                            data-id=items.id
+                            class="badge badge-danger"
+                        ) Không hiển thị
+            td  
+                a(
+                    href=`${prefixAdmin}/blog-category/detail/${items.id}`
+                    class="btn btn-secondary btn-sm"
+                ) Chi tiết
+                if (role.permissions.includes("blog-category_edit"))
+                    a(
+                        href=`${prefixAdmin}/blog-category/edit/${items.id}`
+                        class="btn btn-warning btn-sm"
+                    ) Sửa
+                if (role.permissions.includes("blog-category_delete"))
+                    button(
+                        class="btn btn-danger btn-sm ml-1"
+                        data-item=items.id
+                    ) Xóa
+
+        if items.children && items.children.length > 0
+            +tableTree(items.children, level+1)
