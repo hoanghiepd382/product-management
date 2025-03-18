@@ -59,8 +59,42 @@ if (emojiPicker){
     
     inputChat.addEventListener("keyup", ()=>{
         socket.emit("CLIENT_SEND_TYPING", "show");
+
+        setTimeout(()=>{
+            socket.emit("CLIENT_SEND_TYPING", "hidden")
+        },3000);
     });
 }
-socket.on("SERVER_RETURN_TYPING", (data)=>{
-    console.log(data);
-})
+
+const elementsListTyping = document.querySelector(".inner-list-typing");
+console.log(elementsListTyping);
+if (elementsListTyping){
+    socket.on("SERVER_RETURN_TYPING", (data)=>{
+        console.log(data);
+        if (data.type=="show"){
+            const existTyping = elementsListTyping.querySelector(`[user-id="${data.userId}"]`);
+            if (!existTyping){
+                const boxTyping = document.createElement("div");
+                boxTyping.classList.add("box-typing");
+                boxTyping.setAttribute("user-id", data.userId);
+                boxTyping.innerHTML= `
+                    <div class="inner-name">${data.fullName}</div>
+                    <div class="inner-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                `;
+                elementsListTyping.appendChild(boxTyping);
+            }     
+        }
+        else {
+            const boxTypingRemove = elementsListTyping.querySelector(`[user-id="${data.userId}"]`);
+            if (boxTypingRemove){
+                elementsListTyping.removeChild(boxTypingRemove);
+            }
+        }
+    })
+}
+
+
