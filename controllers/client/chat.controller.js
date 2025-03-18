@@ -17,8 +17,16 @@ module.exports.index = async (req, res) =>{
             userId: userId,
             fullName: fullName,
             content: content
-          })
+          });
         }); 
+        
+        socket.on("CLIENT_SEND_TYPING", async(type)=>{
+          socket.broadcast.emit("SERVER_RETURN_TYPING", {
+            userId: userId,
+            fullName: fullName,
+            type: type
+          });
+        });
   });
   const chats = await Chat.find({
     deleted: false
