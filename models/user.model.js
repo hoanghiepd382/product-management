@@ -14,10 +14,19 @@ const userSchema = new mongoose.Schema({
         default: false
     },
     deleteAt: Date,
+    requestList: Array,
+    acceptList: Array,
+    friendList : [
+        {
+            user_id: String,
+            room_chat_id: String
+        }
+    ],
     status: {
         type: String,
         default: "active"
     },
+    statusOnline : String,
     tokenUser: {
         type: String,
         default: generateHepler.generateRandomString(20) 
