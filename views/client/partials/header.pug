@@ -43,7 +43,9 @@ header.header
                         
                         if(user)
                             li 
-                                a(href="/chat") Chat
+                                a(href="/users/friends") Bạn bè
+                            li 
+                                a(href="/rooms-chat") Phòng chat
                             li 
                                 img.avatar-small(src=user.avatar alt="avatar")
                                 a(href="/user/info") #{user.fullName}

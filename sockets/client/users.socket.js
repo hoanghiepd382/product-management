@@ -1,4 +1,6 @@
 const User = require("../../models/user.model");
+const roomChat = require("../../models/rooms_chat.model");
+
 
 
 module.exports = async (res)=>{
@@ -114,12 +116,36 @@ module.exports = async (res)=>{
         });
 
         socket.on("CLIENT_ACCEPT_FRIEND", async (userId)=>{
-          // Xóa id của B trong acceptList của A và thêm id của B vào friendList của A
           const existBinA = await User.findOne({
             _id: MyUserId,
             acceptList: userId
           });
-         
+          const existAinB = await User.findOne({
+            _id: userId,
+            requestList: MyUserId
+          });
+          const userB = await User.findOne({
+            _id: userId
+          });
+         if (existAinB && existBinA){
+          const dataRoom = {
+            title: userB.fullName,
+            typeRoom: "friend",
+            users:[
+              {
+                user_id: MyUserId,
+                role: "superAdmin"
+              },{
+                user_id: userId,
+                role: "superAdmin"
+              }
+            ]
+          };
+          var newRoomChat = new roomChat(dataRoom);
+          newRoomChat.save();
+         }
+
+         // Xóa id của B trong acceptList của A và thêm id của B vào friendList của A
           if (existBinA){
             await User.updateOne({
               _id: MyUserId
@@ -127,17 +153,14 @@ module.exports = async (res)=>{
               $push : {
                 friendList : {
                   user_id: userId,
-                  room_chat_id: ""
+                  room_chat_id: newRoomChat.id
                 }
               },
               $pull: {acceptList : userId}
             });
           }
           // Xóa id của A trong requestList của B và thêm id của A vào friendList của B
-          const existAinB = await User.findOne({
-            _id: userId,
-            requestList: MyUserId
-          });
+          
           if (existAinB){
             await User.updateOne({
               _id: userId
@@ -145,7 +168,7 @@ module.exports = async (res)=>{
               $push : {
                 friendList : {
                   user_id: MyUserId,
-                  room_chat_id: ""
+                  room_chat_id: newRoomChat.id
                 }
               },
               $pull: {requestList : MyUserId}

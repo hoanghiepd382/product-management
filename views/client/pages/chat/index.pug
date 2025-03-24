@@ -14,6 +14,20 @@ block main
             .row 
                 .col-12 
                     .chat(my-id=user.id)
+                        .chat-header
+                            .user-info
+                                .avatar
+                                    img(src=(roomChat.infoFriend? roomChat.infoFriend.avatar: roomChat.avatar) alt="User Avatar")
+                                .info
+                                    .name #{roomChat.title}
+                                    .status #{user.statusOnline=="online"?"Đang hoạt động" : "Hoạt động 1 giờ trước"}
+                            .action-buttons
+                                button.btn.btn-light.btn-sm(title="Thêm thành viên")
+                                    i.fa-solid.fa-user-plus
+                                button.btn.btn-light.btn-sm.mx-2(title="Xem thành viên")
+                                    i.fa-solid.fa-users
+                                button.btn.btn-light.btn-sm(title="Tùy chọn khác")
+                                    i.fa-solid.fa-ellipsis-vertical
                         .inner-body
                             each chat in chats 
                                 div(class=(chat.user_id==user.id? "message-container outgoing" : "message-container incoming"))

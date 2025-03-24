@@ -389,6 +389,8 @@ img[upload-preview] {
     font-size: 16px;
     line-height: 1;
 }
+/* Chat */
+
 .chat {
     background-color: #e5ddd5;
     border-radius: 12px;
@@ -397,8 +399,65 @@ img[upload-preview] {
     overflow-y: auto;
     display: flex;
     flex-direction: column;
+    margin-top: 0;
+    padding-top: 0;
+    margin-left: 0;
+    padding-left: 0;
+    margin-right: 0;
+    padding-right: 0;
+}
+.chat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+.chat-header .user-info {
+    display: flex;
+    align-items: center;
 }
 
+.chat-header .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 10px;
+}
+
+.chat-header .avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.chat-header .info .name {
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.chat-header .info .status {
+    font-size: 12px;
+    color: #4caf50;
+}
+
+.chat-header .action-buttons {
+    display: flex;
+}
+
+.chat-header .action-buttons button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.chat-header .action-buttons button i {
+    font-size: 14px;
+}
 .inner-body {
     flex: 1;
     display: flex;
@@ -583,6 +642,7 @@ img[upload-preview] {
     width: 90px;
     background-size: contain;
 }
+/* end chat */
 
 /* box-user */
 .box-user {
@@ -665,4 +725,33 @@ img[upload-preview] {
 }
 .box-user .inner-status[status="online"]{
     opacity: 1;
+}
+
+.box-room {
+    display: flex;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 30px;
+}
+.box-room .inner-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #f2f2f2;
+    margin-right: 10px;
+}
+.box-room .inner-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.box-room .inner-info {
+    flex: 1;
+}
+.box-room .inner-info .inner-name {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 3px;
 }
