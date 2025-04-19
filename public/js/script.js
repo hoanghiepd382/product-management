@@ -151,20 +151,20 @@ if (sort){
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-    const contactBox = document.querySelector("#contact-box");
-    const contactToggle = document.querySelector("#contact-toggle");
-    const contactLinks = document.querySelector("#contact-links");
-  
-    let isExpanded = true;
-  
-    contactToggle.addEventListener("click", function () {
-      if (isExpanded) {
-        contactBox.classList.add("collapsed");
-        contactLinks.classList.add("collapsed");
-      } else {
-        contactBox.classList.remove("collapsed");
-        contactLinks.classList.remove("collapsed");
-      }
-      isExpanded = !isExpanded;
-    });
+  const contactBox = document.querySelector("#contact-box");
+  const contactToggle = document.querySelector("#contact-toggle");
+  const contactLinks = document.querySelector("#contact-links");
+
+  let isExpanded = false; // Mặc định thu gọn
+
+  contactToggle.addEventListener("click", function () {
+    if (isExpanded) {
+      contactBox.classList.add("collapsed");
+      contactLinks.classList.add("collapsed");
+    } else {
+      contactBox.classList.remove("collapsed");
+      contactLinks.classList.remove("collapsed");
+    }
+    isExpanded = !isExpanded;
   });
+});
