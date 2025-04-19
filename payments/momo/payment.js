@@ -15,8 +15,8 @@ module.exports.createPayment = async ({ cartId, ids, carts, userInfo }) => {
 
     // Cấu hình MoMo
     const partnerCode = 'MOMO';
-    const accessKey = 'F8BBA842ECF85';
-    const secretKey = 'K951B6PE1waDMi640xX08PD3vg6EkVlz';
+    const accessKey = process.env.accessKey;
+    const secretKey = process.env.secretKey;
     const requestId = orderId;
     const orderInfo = `Thanh toán-${cartId}`;
     const redirectUrl = `http://localhost:3000/checkout/success/${orderId}`;
