@@ -1,7 +1,15 @@
-mixin sub-menu(items, path)
-    ul 
-        each item in items
-            li 
-                a(href=`${path}/${item.slug}`) #{item.title}
-                if item.children && item.children.length > 0
-                    +sub-menu(item.children, path)
+mixin sub-menu(items, path, level=0)
+  ul(class=(level === 0 ? 'dropdown-menu' : 'dropdown-menu submenu'))
+    each item in items
+      if item.children && item.children.length > 0
+        li.dropdown-submenu
+          a.dropdown-item.dropdown-toggle(
+            href=`${path}/${item.slug}` 
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+          ) #{item.title}
+          +sub-menu(item.children, path, level + 1)
+      else
+        li
+          a.dropdown-item(href=`${path}/${item.slug}`) #{item.title}

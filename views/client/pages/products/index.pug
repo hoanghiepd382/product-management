@@ -7,4 +7,28 @@ block main
     .row
         .col-12 
             +box-head(pageTitle)
+            .sort-options.mb-3
+                label(for="sortSelect") Sắp xếp theo: 
+                select#sortSelect(
+                    name="sort" 
+                    sort-select               
+                 )
+                    option(value="") Mặc định
+                    option(value="price-asc") Giá: Thấp đến Cao
+                    option(value="price-desc") Giá: Cao đến Thấp
     +product-grid(products)
+    if objectPagination && objectPagination.totalPage > 1
+        .row.mt-4
+            .col-12
+                nav(aria-label="Blog pagination")
+                    ul.pagination.justify-content-center
+                        if objectPagination.currentPage > 1
+                            li.page-item(class=objectPagination.currentPage === 1 ? 'disabled' : '')
+                                a.page-link(href=`/product?page=${objectPagination.currentPage-1}`) Trước
+                        
+                        - for (let i = 1; i <= objectPagination.totalPage; i++)
+                            li.page-item(class=objectPagination.currentPage === i ? 'active' : '')
+                                a.page-link(href=`/product?page=${i}`)= i
+                        if objectPagination.currentPage < objectPagination.totalPage
+                            li.page-item(class=objectPagination.currentPage === totalPages ? 'disabled' : '')
+                                a.page-link(href=`/product?page=${objectPagination.currentPage+1}`) Sau

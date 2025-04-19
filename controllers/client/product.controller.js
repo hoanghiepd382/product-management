@@ -2,21 +2,45 @@ const Product = require("../../models/product.model");
 const ProductCategory = require("../../models/product-category.model");
 const newPriceProduct = require("../../helpers/newPriceProduct");
 const getAllCategory = require("../../helpers/getAllCategory");
-
+const paginationHelpers = require("../../helpers/pagination");
 
 module.exports.index = async (req, res)=>{
-    const products = await Product.find({deleted : false});
+    const sort = {};
+    if (req.query.sortKey && req.query.sortValue){
+        sort[req.query.sortKey] = req.query.sortValue
+    }
+    else{
+        sort.createdAt = "desc"
+    }
+    let objectPagination = {
+        currentPage : 1,
+        limitPage : 12
+    }
+    const totalProduct = await Product.countDocuments({deleted: false});
+    objectPagination = paginationHelpers(totalProduct, objectPagination, req.query);
+    
+    const products = await Product.find({deleted : false})
+    .sort(sort)
+    .skip(objectPagination.skip)
+    .limit(objectPagination.limitPage);
     
     const newProducts = newPriceProduct.newPrice(products);
     
     res.render("client/pages/products/index", {
         pageTitle : "Danh sách sản phẩm",
-        products : newProducts
+        products : newProducts,
+        objectPagination: objectPagination
     });
   };
 
 module.exports.getProductCategory = async (req, res) =>{
-
+    const sort = {};
+    if (req.query.sortKey && req.query.sortValue){
+        sort[req.query.sortKey] = req.query.sortValue
+    }
+    else{
+        sort.createdAt = "desc"
+    }
     const category = await ProductCategory.findOne({
         slug: req.params.categorySlug,
         status: "active",
@@ -29,11 +53,11 @@ module.exports.getProductCategory = async (req, res) =>{
             product_category_id: {$in :[category.id, ...listCateId]},
             status: "active",
             deleted: false
-        }).sort("desc");
+        }).sort(sort);
         var newProduct = newPriceProduct.newPrice(product);
-    res.render("client/pages/products/index",{
-        pageTitle: category.title,
-        products: newProduct
+        res.render("client/pages/products/index",{
+            pageTitle: category.title,
+            products: newProduct
         });
     }
     

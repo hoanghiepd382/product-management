@@ -1,61 +1,105 @@
 include ../mixins/sub-menu.pug
 
-header.header 
+header.header
+  .top-bar.bg-dark.py-2
     .container
-        .row.align-items-center
-            .col-2 
-                .inner-logo
-                    a(href="/")
-                        img(src="/images/Gymlord.png", alt="Logo", class='img-logo')
+      .row.align-items-center
+        .col-2.col-md-2
+          .inner-logo
+            a(href="/").d-flex.align-items-center
+              img(src="/images/Gymlord.png" alt="Logo" class="img-logo" style="max-height: 50px;")
+              span.logo-text.ml-2 GYM LORD
 
-            if(display)
-                .col-3
-                    form(
-                        action="/search"
-                        method="GET"
-                    )
-                        div(class="form-group d-flex mb-0")
-                            input(
-                                type="text"
-                                placehoder="Nhập từ khóa..."
-                                class="form-control"
-                                name="keyword"
-                                value=key
-                            )
-                            button(
-                                type="submit"
-                                class="btn btn-primary"
-                            ) Tìm
-            else 
-                .col-3
+        // Thanh tìm kiếm
+        .col-6.col-md-5
+          .box-search
+            form(action="/search/result" method="GET")
+              .input-group
+                input(
+                  type="text"
+                  placeholder="Tìm sản phẩm, bài viết..."
+                  class="form-control"
+                  name="keyword"
+                  value=key
+                  style="border-radius: 20px 0 0 20px;"
+                )
+                .input-group-append
+                  button(type="submit" class="btn btn-primary" style="border-radius: 0 20px 20px 0;")
+                    i.fa.fa-search
+            .inner-suggest
+              .inner-list
 
-            .col-7
-                .inner-menu 
-                    ul 
-                        li 
-                            a(href="/") Trang chủ
-                        li(class="sub-menu")
-                            -const pathProduct = "/product"
-                            a(href="/product") Sản phẩm
-                            +sub-menu(headerProductCategory,pathProduct)
-                        li 
-                            a(href="/cart") Giỏ hàng (#{minicart? minicart.totalQuantity : 0})
-                        
-                        if(user)
-                            li 
-                                a(href="/users/friends") Bạn bè
-                            li 
-                                a(href="/rooms-chat") Phòng chat
-                            li 
-                                img.avatar-small(src=user.avatar alt="avatar")
-                                a(href="/user/info") #{user.fullName}
-                            li 
-                                a(href="/user/logout") Đăng xuất
-                        else
-                            li 
-                                a(href="/user/login") Đăng nhập
-                            li 
-                                a(href="/user/register") Đăng ký
-                            
+        // Các action (Đăng nhập, Giỏ hàng, Bài viết)
+        .col-4.col-md-5.text-right
+          .inner-actions.d-flex.justify-content-end.align-items-center
+            // Bài viết
+            a(href="/blog" class="text-white text-decoration-none mr-3")
+              <i class="fa-regular fa-newspaper"></i> Bài viết
+              
+            
+            // Giỏ hàng
+            a(href="/cart" class="text-white text-decoration-none mr-3 position-relative")
+              i.fa.fa-shopping-cart.mr-1
+              | Giỏ hàng
+              if minicart && minicart.totalQuantity
+                span.badge.badge-danger.rounded-circle.position-absolute
+                  | #{minicart.totalQuantity}
 
+            // Đăng nhập/Đăng ký hoặc Thông tin người dùng
+            if user
+              .dropdown
+                a(href="#" class="text-white text-decoration-none dropdown-toggle" data-toggle="dropdown")
+                  img.avatar-small(src=user.avatar alt="avatar" style="width: 30px; height: 30px; border-radius: 50%; margin-right: 5px;")
+                  | #{user.fullName}
+                .dropdown-menu.dropdown-menu-right
+                  a.dropdown-item(href="/user/info") Thông tin cá nhân
+                  a.dropdown-item(href="/users/friends") Bạn bè
+                  a.dropdown-item(href="/user/logout") Đăng xuất
+            else
+              a(href="/user/login" class="text-white text-decoration-none mr-2")
+                i.fa.fa-sign-in.mr-1
+                | Đăng nhập
+              span.text-white.mx-1 |
+              a(href="/user/register" class="text-white text-decoration-none")
+                i.fa.fa-user-plus.mr-1
+                | Đăng ký
 
+  // Menu điều hướng chính
+  .nav-bar.bg-light.py-2.border-bottom
+    .container
+      .row
+        .col-12
+          nav.navbar.navbar-expand-md.navbar-light
+            button.navbar-toggler(type="button" data-toggle="collapse" data-target="#navbarMain" aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation")
+              span.navbar-toggler-icon
+            #navbarMain.collapse.navbar-collapse
+              ul.navbar-nav.mx-auto
+                li.nav-item
+                  a.nav-link(href="/") Trang chủ
+                li.nav-item.dropdown
+                  a.nav-link.dropdown-toggle(href="/product" id="productMenu" data-toggle="dropdown" aria-haspopup=true aria-expanded=false) Danh mục
+                  +sub-menu(headerProductCategory, "/product")
+                li.nav-item
+                  a.nav-link(href="/product") Tất cả sản phẩm
+                li.nav-item
+                  a.nav-link(href="/") Về chúng tôi
+
+// Banner quảng cáo
+section.banner.mt-3
+  .container
+    .row
+      .col-12
+        .carousel.slide(id="bannerCarousel" data-ride="carousel")
+          .carousel-inner
+            .carousel-item.active
+              img(src="https://img.freepik.com/free-vector/gradient-personal-trainer-facebook-cover_23-2149424478.jpg?t=st=1745030174~exp=1745033774~hmac=a5dac95d10054e81580de4aa48d0f0bf62d868fc8e9d6713c0d60ca8627afa79&w=1800" class="d-block w-100" alt="Banner 1" style="height: 300px; object-fit: cover;")
+            .carousel-item
+              img(src="https://img.freepik.com/premium-psd/fitness-gym-training-facebook-cover-web-banner-psd-template_265396-140.jpg?w=1380" class="d-block w-100" alt="Banner 2" style="height: 300px; object-fit: cover;")
+            .carousel-item
+              img(src="https://img.freepik.com/premium-psd/fitness-training-gym-workout-facebook-timeline-cover-social-media-web-banner-template_349461-44.jpg?w=1380" class="d-block w-100" alt="Banner 3" style="height: 300px; object-fit: cover;")
+          a.carousel-control-prev(href="#bannerCarousel" role="button" data-slide="prev")
+            span.carousel-control-prev-icon(aria-hidden="true")
+            span.sr-only Previous
+          a.carousel-control-next(href="#bannerCarousel" role="button" data-slide="next")
+            span.carousel-control-next-icon(aria-hidden="true")
+            span.sr-only Next

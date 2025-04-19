@@ -63,7 +63,7 @@ block main
                     td #{item.totalPrice}$
 
           if(orderDetail.products.length>0)
-            div(class="total-amount") Tổng đơn hàng: #{orderDetail.totalPrice}$
+            div(class="total-amount") Tổng đơn hàng: #{orderDetail.totalPrice.toLocaleString('vi-VN')} VND
 
           a(href="/product" class="action-button")
             i(class="fas fa-shopping-cart mr-2")

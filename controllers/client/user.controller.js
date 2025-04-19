@@ -9,7 +9,7 @@ const sendMailHelper = require("../../helpers/sendMail");
 
 module.exports.register = (req, res) =>{
     res.render("client/pages/user/register", {
-        pageTitle: "Trang đăng ký tài khoản"
+        pageTitle: "Đăng ký tài khoản"
     });
 }
 module.exports.registerPost = async (req, res) =>{
@@ -44,7 +44,7 @@ module.exports.registerPost = async (req, res) =>{
 
 module.exports.login = async (req, res) =>{
     res.render("client/pages/user/login", {
-        pageTitle: "Trang đăng nhập"
+        pageTitle: "Đăng nhập"
     })
 }
 module.exports.loginPost = async (req, res) =>{

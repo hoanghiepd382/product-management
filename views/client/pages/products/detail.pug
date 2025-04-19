@@ -17,10 +17,10 @@ block main
                             a(href=`/product/${product.category.slug}`) #{product.category.title}
 
                     if (product.newPrice)
-                        div(class="inner-price-new") #{product.newPrice}$
+                        div(class="inner-price-new") #{Number(product.newPrice).toLocaleString('vi-VN')}đ
 
                     if (product.price)
-                        div(class="inner-price-old") #{product.price}$
+                        div(class="inner-price-old") #{product.price.toLocaleString('vi-VN')}đ
 
                     if (product.discountPercentage)
                         div(class="inner-percent") Giảm tới:  <span>#{product.discountPercentage}%</span> 

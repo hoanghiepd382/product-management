@@ -1,0 +1,137 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+
+block main
+    .container.my-3
+        .row
+            .col-12 
+                +box-head(pageTitle)
+        
+        .row.mb-4
+            .col-12
+                nav(aria-label="breadcrumb")
+                    ol.breadcrumb.bg-light.p-2.rounded
+                        li.breadcrumb-item
+                            a(href="/") Trang chủ
+                        li.breadcrumb-item
+                            a(href="/blog") Bài viết
+                        li.breadcrumb-item.active(aria-current="page") #{pageTitle}
+        
+        .row.mb-4
+            .col-12
+                h4.mb-3.border-bottom.pb-2 Chủ đề bài viết
+                .category-tabs.d-flex.flex-wrap.gap-2
+                    a.category-pill.active(href="/blog") Tất cả
+                    each category in blogCategory
+                        a.category-pill(href=`/blog/${category.slug}`)= category.title
+        
+        .row
+            .col-lg-8
+                if activeCategory
+                    .alert.alert-light.mb-4.border-left-primary
+                        h5.mb-0
+                            i.fas.fa-tag.me-2
+                            | Chủ đề: #{activeCategory}
+                
+                .row
+                    each blog in blogs
+                        .col-md-6.mb-4
+                            .card.h-100.blog-card.shadow-sm.border-0.transition-hover
+                                .blog-thumbnail.position-relative
+                                    img.card-img-top(src=blog.thumbnail alt=blog.title)
+                                    .blog-overlay
+                                        a.btn.btn-sm.btn-light(href=`/blog/detail/${blog.slug}`)
+                                            i.fas.fa-eye.me-1
+                                            | Xem chi tiết
+                                .card-body
+                                    
+                                    h5.card-title
+                                        a.text-decoration-none.blog-title(href=`/blog/detail/${blog.slug}`)= blog.title
+                                    p.card-text.blog-description.text-muted !{blog.description}
+                                    .d-flex.justify-content-between.align-items-center.mt-3
+                                        small.text-muted
+                                            i.fas.fa-calendar-alt.me-1
+                                            | #{new Date(blog.createdAt).toLocaleDateString()}
+                                        a.btn.btn-outline-primary.btn-sm(href=`/blog/detail/${blog.slug}`) Đọc tiếp
+                    else
+                        .col-12
+                            .alert.alert-info.text-center Hiện chưa có bài viết nào
+                
+                if objectPagination && objectPagination.totalPage > 1
+                    .row.mt-4
+                        .col-12
+                            nav(aria-label="Blog pagination")
+                                ul.pagination.justify-content-center
+                                    if objectPagination.currentPage > 1
+                                        li.page-item(class=objectPagination.currentPage === 1 ? 'disabled' : '')
+                                            a.page-link(href=`/blog?page=${objectPagination.currentPage-1}`) Trước
+                                    
+                                    - for (let i = 1; i <= objectPagination.totalPage; i++)
+                                        li.page-item(class=objectPagination.currentPage === i ? 'active' : '')
+                                            a.page-link(href=`/blog?page=${i}`)= i
+
+                                    if objectPagination.currentPage < objectPagination.totalPage
+                                        li.page-item(class=objectPagination.currentPage === objectPagination.totalPage ? 'disabled' : '')
+                                            a.page-link(href=`/blog?page=${objectPagination.currentPage+1}`) Sau
+                        
+            .col-lg-4
+                .featured-posts.mb-4
+                    h4.mb-3.border-bottom.pb-2 Bài viết nổi bật
+                                     
+                    - const featuredBlogs = allBlogs.filter(blog => blog.featured == "1").slice(0, 3)
+                    each blog in featuredBlogs
+                        .card.mb-3.featured-blog-card.shadow-sm.border-0
+                            .row.g-0
+                                .col-4
+                                    img.img-fluid.h-100.rounded-start(src=blog.thumbnail alt=blog.title style="object-fit: cover;")
+                                .col-8
+                                    .card-body.py-2
+                                        span.badge.bg-danger.mb-1 Nổi bật
+                                        h6.card-title.mb-1
+                                            a.text-decoration-none(href=`/blog/detail/${blog.slug}`)= blog.title
+                                        small.text-muted
+                                            i.fas.fa-calendar-alt.me-1
+                                            | #{new Date(blog.createdAt).toLocaleDateString()}            
+                
+                .recent-posts.mb-4
+                    h4.mb-3.border-bottom.pb-2 Bài viết mới nhất
+                    - const newBlog = allBlogs.slice(0,3)              
+                    each blog in newBlog
+                        .card.mb-3.recent-blog-card.shadow-sm.border-0
+                            .row.g-0
+                                .col-4
+                                    img.img-fluid.h-100.rounded-start(src=blog.thumbnail alt=blog.title style="object-fit: cover;")
+                                .col-8
+                                    .card-body.py-2
+                                        h6.card-title.mb-1
+                                            a.text-decoration-none(href=`/blog/detail/${blog.slug}`)= blog.title
+                                        small.text-muted
+                                            i.fas.fa-calendar-alt.me-1
+                                            | #{new Date(blog.createdAt).toLocaleDateString()}
+                
+                .newsletter.mb-4
+                    .card.border-0.shadow-sm.bg-primary.text-white
+                        .card-body
+                            h5.card-title.mb-3 Đăng ký nhận bài viết mới
+                            p.card-text.small Nhận thông tin về các bài viết, mẹo tập luyện và khuyến mãi mới nhất
+                            form
+                                .input-group
+                                    input.form-control(type="email" placeholder="Email của bạn")
+                                    button.btn.btn-light(type="submit") Đăng ký
+                
+
+                .featured-products
+                    h4.mb-3.border-bottom.pb-2 Sản phẩm đề xuất
+                    
+                    .row
+                        each product in productRecommend
+                            .col-12.mb-3
+                                .card.border-0.product-card.shadow-sm
+                                    .row.g-0
+                                        .col-4
+                                            img.img-fluid.rounded-start(src=product.thumbnail alt="Sản phẩm gym")
+                                        .col-8
+                                            .card-body.py-2
+                                                h6.card-title.mb-1 #{product.title}
+                                                .product-price.text-success.fw-bold #{product.price.toLocaleString("vi-VN")}
+                                                a.btn.btn-sm.btn-outline-primary.mt-2(href=`/product/detail/${product.slug}`) Xem chi tiết

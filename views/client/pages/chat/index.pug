@@ -1,5 +1,6 @@
 extends ../../layouts/default.pug
 include ../../mixins/box-head.pug
+include ../../mixins/chat.pug
 
 block main
 
@@ -22,9 +23,9 @@ block main
                                     .name #{roomChat.title}
                                     .status #{user.statusOnline=="online"?"Đang hoạt động" : "Hoạt động 1 giờ trước"}
                             .action-buttons
-                                button.btn.btn-light.btn-sm(title="Thêm thành viên")
+                                button.btn.btn-light.btn-sm(title="Thêm thành viên" data-toggle="modal" data-target="#addMemberModal")
                                     i.fa-solid.fa-user-plus
-                                button.btn.btn-light.btn-sm.mx-2(title="Xem thành viên")
+                                button.btn.btn-light.btn-sm.mx-2(title="Xem thành viên" data-toggle="modal" data-target="#viewMembersModal")
                                     i.fa-solid.fa-users
                                 button.btn.btn-light.btn-sm(title="Tùy chọn khác")
                                     i.fa-solid.fa-ellipsis-vertical
@@ -67,6 +68,9 @@ block main
                                 span(class="button-icon btn btn-light mx-2") <i class="fa-regular fa-face-smile"></i>
                                 button
                                     i.fa-solid.fa-paper-plane
+
+    +viewMember(roomChat, user)
+    +addMember(roomChat)
     
     div(class="tooltip" role="tooltip")
         emoji-picker(class="light")

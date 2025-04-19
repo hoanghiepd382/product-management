@@ -2,47 +2,65 @@ extends ../../layouts/default.pug
 include ../../mixins/flash.pug
 
 block main 
-    +flashError(5000)
+  +flashError(5000)
 
-    .container.my-5 
-        .row.justify-content-center
-            .col-8
-                h1(class="text-center") Đăng ký tài khoản
-                form(
-                    action="/user/register"
-                    method="POST"
+  .container.my-5
+    .row.justify-content-center
+      .col-md-6.col-lg-4
+        .card.shadow-sm.border-0
+          .card-body.p-4
+            h1.text-center.mb-4 Đăng ký tài khoản
+            form(action="/user/register" method="POST")
+              .form-group.mb-3
+                label(for="fullName" class="form-label") Họ và tên
+                input(
+                  type="text"
+                  class="form-control rounded-pill"
+                  id="fullName"
+                  name="fullName"
+                  placeholder="Nhập họ và tên"
+                  required
                 )
-                    div(class="form-group")
-                        label(for="fullName") Họ và tên
-                        input(
-                            type="text"
-                            class="form-control"
-                            id="fullName"
-                            name="fullName"
-                            required
-                        )
-                    div(class="form-group")
-                        label(for="email") Email
-                        input(
-                            type="email"
-                            class="form-control"
-                            id="email"
-                            name="email"
-                            required
-                        )
-                    div(class="form-group")
-                        label(for="password") Mật khẩu
-                        input(
-                            type="password"
-                            class="form-control"
-                            id="password"
-                            name="password"
-                            required
-                        )
-                    div(class="form-group")
-                        button(
-                            type="submit"
-                            class="btn btn-primary btn-block"
-                        ) Đăng ký
+              .form-group.mb-3
+                label(for="email" class="form-label") Email
+                input(
+                  type="email"
+                  class="form-control rounded-pill"
+                  id="email"
+                  name="email"
+                  placeholder="Nhập email của bạn"
+                  required
+                )
+              .form-group.mb-3
+                label(for="password" class="form-label") Mật khẩu
+                input(
+                  type="password"
+                  class="form-control rounded-pill"
+                  id="password"
+                  name="password"
+                  placeholder="Nhập mật khẩu"
+                  required
+                )
+              .form-group.mb-3
+                button(
+                  type="submit"
+                  class="btn btn-primary btn-block rounded-pill"
+                ) Đăng ký
+            
+            // Phân cách
+            .divider.my-4
+              span Hoặc đăng ký bằng
+            
+            // Nút Google và Facebook
+            .d-flex.gap-2
+              button.btn.btn-outline-danger.social-btn.rounded-pill(type="button")
+                img(src="/images/google-logo.png" alt="Google" class="rounded-circle mr-2" style="width: 20px; height: 20px; object-fit: cover;")
+                | Google
+              button.btn.btn-outline-primary.social-btn.rounded-pill(type="button")
+                img(src="/images/facebook-logo.webp" alt="Facebook" class="rounded-circle mr-2" style="width: 20px; height: 20px; object-fit: cover;")
+                | Facebook
 
-    script(src="/js/script.js")
+            // Liên kết đăng nhập
+            .text-center.mt-3
+              p.small Đã có tài khoản? 
+                a(href="/user/login" class="text-primary") Đăng nhập ngay

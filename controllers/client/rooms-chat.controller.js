@@ -34,7 +34,6 @@ module.exports.createPost = async (req, res)=>{
     const title = req.body.title;
     const usersId = req.body.usersId;
     
-    console.log(usersId);
     const dataRoom = {
         title: title,
         typeRoom: "group",

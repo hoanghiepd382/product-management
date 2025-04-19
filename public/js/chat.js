@@ -153,4 +153,3 @@ const bodyChatPreviewImage = document.querySelector(".inner-body");
 if (bodyChatPreviewImage){
     const gallery = new Viewer(bodyChatPreviewImage);
 }
-

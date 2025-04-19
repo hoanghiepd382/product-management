@@ -23,16 +23,16 @@ block main
                     name="title"
                     required
                 ) 
-            //- div(class="form-group")
-            //-     label(for="produc_category_id") Danh mục 
-            //-     select(
-            //-         name="product_category_id"
-            //-         id="product_category_id"
-            //-         class="form-control"
-            //-     ) 
-            //-         option(value="") -- Chọn danh mục --
-            //-         if(records)
-            //-             +selectTree(records)
+            div(class="form-group")
+                label(for="blog_category_id") Danh mục 
+                select(
+                    name="blog_category_id"
+                    id="blog_category_id"
+                    class="form-control"
+                ) 
+                    option(value="") -- Chọn danh mục --
+                    if(records)
+                        +selectTree(records)
 
             div(class="form-group form-check form-check-inline")               
                 input(

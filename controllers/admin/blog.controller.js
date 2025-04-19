@@ -1,6 +1,9 @@
 const Blog = require("../../models/blog.model");
+const blogCategory = require("../../models/blog-category.model");
 const Account = require("../../models/account.model");
 const prefixConfig = require("../../config/system");
+const createTreeHelper = require("../../helpers/create-tree");
+
 
 module.exports.index = async (req, res) =>{
     const blog = await Blog.find({
@@ -13,8 +16,14 @@ module.exports.index = async (req, res) =>{
 }
 
 module.exports.create = async (req, res) =>{
+    const blogCategorys = await blogCategory.find({
+        deleted: false,
+        status: "display"
+    });
+    const treeBlogCategory = createTreeHelper.createTree(blogCategorys);
     res.render("admin/pages/blogs/create", {
-        pageTitle: "Tạo bài viết mới"
+        pageTitle: "Tạo bài viết mới",
+        records: treeBlogCategory
     })
 }
 

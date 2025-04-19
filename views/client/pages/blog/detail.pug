@@ -1,0 +1,109 @@
+extends ../../layouts/default.pug
+include ../../mixins/box-head.pug
+
+block main
+  .container.my-3
+    .row
+      .col-12 
+        +box-head(pageTitle)
+    
+    .row.mb-4
+      .col-12
+        nav(aria-label="breadcrumb")
+          ol.breadcrumb.bg-light.p-2.rounded
+            li.breadcrumb-item
+              a(href="/") Trang chủ
+            li.breadcrumb-item
+              a(href="/blog") Bài viết
+            li.breadcrumb-item.active(aria-current="page") #{pageTitle}
+    
+    .row.mb-4
+      .col-12
+        h4.mb-3.border-bottom.pb-2 Chủ đề bài viết
+        .category-tabs.d-flex.flex-wrap.gap-2
+          a.category-pill(href="/blog", class=!activeCategory ? 'active' : '') Tất cả
+          each category in blogCategory
+            a.category-pill(href=`/blog/${category.slug}`, class=category.title === activeCategory ? 'active' : '')= category.title
+    
+    .row
+      .col-12.col-lg-8.mb-4.mb-lg-0
+        .card.border-0.shadow-sm.mb-4
+          if blog.thumbnail
+            img.card-img-top(src=blog.thumbnail alt=blog.title style="object-fit: cover; max-height: 400px;")
+          .card-body
+            h1.card-title.mb-3 #{blog.title}
+            .blog-meta.mb-3
+              small.text-muted
+                i.fas.fa-calendar-alt.me-1
+                | #{new Date(blog.createdAt).toLocaleDateString()}
+              if activeCategory && blogCategory.find(cat => cat.title === activeCategory)
+                span.text-muted.mx-2 |
+                small.text-muted
+                  i.fas.fa-tag.me-1
+                  a.text-decoration-none(href=`/blog/${blogCategory.find(cat => cat.title === activeCategory).slug}`)= activeCategory
+            .blog-content
+              //- Nội dung bài viết, sử dụng != để render HTML
+              != blog.content
+            .mt-4
+              a.btn.btn-outline-primary(href="/blog") Quay lại danh sách bài viết
+      
+      .col-12.col-lg-4
+        .sidebar
+          .featured-posts.mb-4
+            h4.mb-3.border-bottom.pb-2 Bài viết nổi bật
+            - const featuredBlogs = blogs.filter(blog => blog.featured === "1").slice(0, 3)
+            if featuredBlogs.length > 0
+              each blog in featuredBlogs
+                .card.mb-3.featured-blog-card.shadow-sm.border-0
+                  .row.g-0
+                    .col-4
+                      img.img-fluid.h-100.rounded-start(src=blog.thumbnail alt=blog.title style="object-fit: cover;")
+                    .col-8
+                      .card-body.py-2
+                        span.badge.bg-danger.mb-1 Nổi bật
+                        h6.card-title.mb-1
+                          a.text-decoration-none(href=`/blog/detail/${blog.slug}`)= blog.title
+                        small.text-muted
+                          i.fas.fa-calendar-alt.me-1
+                          | #{new Date(blog.createdAt).toLocaleDateString()}
+            else
+              .alert.alert-info.text-center Chưa có bài viết nổi bật
+          
+          .recent-posts.mb-4
+            h4.mb-3.border-bottom.pb-2 Bài viết mới nhất
+            - const newBlog = blogs.slice(0, 3)
+            if newBlog.length > 0
+              each blog in newBlog
+                .card.mb-3.recent-blog-card.shadow-sm.border-0
+                  .row.g-0
+                    .col-4
+                      img.img-fluid.h-100.rounded-start(src=blog.thumbnail alt=blog.title style="object-fit: cover;")
+                    .col-8
+                      .card-body.py-2
+                        h6.card-title.mb-1
+                          a.text-decoration-none(href=`/blog/detail/${blog.slug}`)= blog.title
+                        small.text-muted
+                          i.fas.fa-calendar-alt.me-1
+                          | #{new Date(blog.createdAt).toLocaleDateString()}
+            else
+              .alert.alert-info.text-center Chưa có bài viết mới
+          
+
+          
+          .featured-products
+            h4.mb-3.border-bottom.pb-2 Sản phẩm đề xuất
+            if productRecommend && productRecommend.length > 0
+              .row
+                each product in productRecommend
+                  .col-12.mb-3
+                    .card.border-0.product-card.shadow-sm
+                      .row.g-0
+                        .col-4
+                          img.img-fluid.rounded-start(src=product.thumbnail alt="Sản phẩm gym")
+                        .col-8
+                          .card-body.py-2
+                            h6.card-title.mb-1 #{product.title}
+                            .product-price.text-success.fw-bold #{product.price.toLocaleString("vi-VN")}
+                            a.btn.btn-sm.btn-outline-primary.mt-2(href=`/product/detail/${product.slug}`) Xem chi tiết
+            else
+              .alert.alert-info.text-center Chưa có sản phẩm đề xuất

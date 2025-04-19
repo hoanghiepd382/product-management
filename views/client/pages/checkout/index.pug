@@ -34,7 +34,8 @@ block main
                                 td #{item.totalPrice}
                                 
 
-                h3(class="text-right") Tổng đơn hàng: #{cartDetail.totalPrice}
+                h3.text-right Tổng đơn hàng: #{cartDetail.totalPrice.toLocaleString('vi-VN')} VND
+
 
             if(cartDetail.products.length>0)
                 .row
@@ -74,7 +75,32 @@ block main
                                         value=userBuy.address
                                         required
                                     )
+
+                                // 👉 Thêm phương thức thanh toán
                                 div(class="form-group")
+                                    label.mb-2.font-weight-bold Phương thức thanh toán
+
+                                    .d-flex.flex-wrap.gap-3
+                                        label.payment-method-option
+                                            input(type="radio", name="paymentMethod", value="bank", checked hidden)
+                                            .payment-card
+                                                img(src="/images/bank.png", alt="Bank", width="50")
+                                                span.ml-2 Tài khoản ngân hàng
+
+                                        label.payment-method-option
+                                            input(type="radio", name="paymentMethod", value="momo", hidden)
+                                            .payment-card
+                                                img(src="/images/momo.png", alt="MoMo", width="50")
+                                                span.ml-2 Ví MoMo
+
+                                        label.payment-method-option
+                                            input(type="radio", name="paymentMethod", value="vnpay", hidden)
+                                            .payment-card
+                                                img(src="/images/vnpay.png", alt="VNPay", width="50")
+                                                span.ml-2 VNPay
+
+
+                                div(class="form-group mt-3")
                                     button(
                                         type="submit"
                                         class="btn btn-success btn-block"

@@ -16,6 +16,23 @@ html
 
         block main
 
+        #contact-box.contact-box
+            #contact-toggle.contact-toggle
+                i.fa.fa-comments.contact-icon
+            #contact-links.contact-links
+                a.contact-item(href="https://m.me/your-facebook-page" target="_blank")
+                    i.fa.fa-facebook.contact-icon(style="background: #3b5998;")
+                    span Chat Facebook
+                    span.contact-time (8h-21h)
+                a.contact-item(href="https://zalo.me/your-zalo-id" target="_blank")
+                    i.fa.fa-comment.contact-icon(style="background: #0068ff;")
+                    span Chat Zalo
+                    span.contact-time (8h-21h)
+                a.contact-item(href="tel:0944387682")
+                    i.fa.fa-phone.contact-icon(style="background: #28a745;")
+                    span 0961560888
+                    span.contact-time (8h-21h)
+
 
         include ../partials/footer.pug
         <script src="/socket.io/socket.io.js"></script>
@@ -25,5 +42,6 @@ html
         <script type="module" src="https://unpkg.com/file-upload-with-preview/dist/index.js"></script>
         script(src="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.11.7/viewer.js") 
         script(src="/js/socket.js")
+        script(src="/js/script.js") 
 
         block script

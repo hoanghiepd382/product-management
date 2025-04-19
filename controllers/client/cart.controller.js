@@ -81,8 +81,6 @@ module.exports.update = async (req, res) =>{
     const productId = req.params.productId;
     const quantity = req.params.quantity;
 
-    console.log(productId);
-    console.log(quantity);
     await Cart.updateOne({
         _id: cartId,
         "products.product_id" : productId
@@ -90,6 +88,6 @@ module.exports.update = async (req, res) =>{
         $set : {"products.$.quantity": quantity }
     })
 
-    req.flash("success", "Cập nhật thành công");
+    //req.flash("success", "Cập nhật thành công");
     res.redirect("back");
 }

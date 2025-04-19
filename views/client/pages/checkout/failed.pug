@@ -1,0 +1,10 @@
+extends ../../layouts/default.pug
+
+block main
+    .container.mt-5
+        .alert.alert-danger.text-center
+            h2 Thanh toán thất bại!
+            p Xin lỗi, quá trình thanh toán của bạn không thành công.
+            p Vui lòng thử lại hoặc kiểm tra lại thông tin đơn hàng.
+            a.btn.btn-primary.mt-3(href='/cart') Quay lại giỏ hàng
+            a.btn.btn-secondary.mt-3.ms-2(href='/') Về trang chủ

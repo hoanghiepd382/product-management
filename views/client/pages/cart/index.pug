@@ -1,58 +1,84 @@
 extends ../../layouts/default.pug
 include ../../mixins/box-head.pug
-
+include ../../mixins/flash.pug
 
 block main 
+  +flashSuccess(3000)
+  +flashError(3000)
+  .container.my-5
+    .row
+      .col-12
+        +box-head("Giỏ hàng")
 
-    .container.my-3 
-        .row 
-            .col-12 
-                +box-head("Giỏ hàng")
+    if cartDetail && cartDetail.products && cartDetail.products.length > 0
+      .row
+        .col-12
+          form(method="POST" action="/checkout")
+            .card.shadow-sm.border-0
+              .card-body.p-0
+                .table-responsive
+                  table.table.table-hover.table-bordered.mb-0(checkbox-multi)
+                    thead.bg-light
+                      tr
+                        th(scope="col" style="width: 50px;")
+                          input(type="checkbox" name="checkall")
+                        th(scope="col" style="width: 50px;") STT
+                        th(scope="col" style="width: 100px;") Ảnh
+                        th(scope="col") Tên sản phẩm
+                        th(scope="col" style="width: 120px;") Giá
+                        th(scope="col" style="width: 100px;") Số lượng
+                        th(scope="col" style="width: 120px;") Tổng tiền
+                        th(scope="col" style="width: 100px;") Hành động
+                    tbody
+                      each item, index in cartDetail.products
+                        tr
+                          td.text-center.align-middle
+                            input(
+                              type="checkbox"
+                              name="id"
+                              value=item.product_id
+                              data-price=item.totalPrice
+                            )
+                          td.text-center.align-middle #{index + 1}
+                          td.text-center.align-middle
+                            a(href=`/product/detail/${item.productInfo.slug}`)
+                              img(src=item.productInfo.thumbnail alt=item.productInfo.title style="width: 80px; height: 80px; object-fit: cover; border-radius: 4px;")
+                          td.align-middle
+                            a(href=`/product/detail/${item.productInfo.slug}` class="text-dark text-decoration-none") #{item.productInfo.title}
+                          td.text-center.align-middle #{Number(item.productInfo.newPrice).toLocaleString('vi-VN')} đ
+                          td.text-center.align-middle
+                            input(
+                              type="number"
+                              name="quantity"
+                              value=item.quantity
+                              min="1"
+                              product-id=item.productInfo.id
+                              class="form-control form-control-sm text-center"
+                              style="width: 80px;"
+                            )
+                          td.text-center.align-middle #{item.totalPrice.toLocaleString('vi-VN')} đ
+                          td.text-center.align-middle
+                            a(
+                              href=`/cart/delete/${item.productInfo.id}`
+                              class="btn btn-danger btn-sm"
+                              onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này khỏi giỏ hàng?')"
+                            ) Xóa
 
+            .card.mt-3.shadow-sm.border-0
+              .card-body.text-right
+                h4.mb-3
+                  span Tổng thanh toán: 
+                  span#total-checked.text-primary 0
+                  |  đ
+                button(type="submit" class="btn btn-success btn-lg") Thanh toán ngay
 
-        .row 
-            .col-12
-                table(class="table table-bordered")                  
-                    thead 
-                        tr 
-                            th STT 
-                            th Ảnh
-                            th Tên
-                            th Giá
-                            th Số lượng
-                            th Tổng tiền
-                            th Hành động
-                    tbody 
-                        each item, index in cartDetail.products
-                            tr 
-                                td #{index+1}
-                                td 
-                                    img(src=item.productInfo.thumbnail, alt=item.productInfo.title width="80px")
-                                td 
-                                    a(href=`/product/detail/${item.productInfo.slug}`) #{item.productInfo.title}
-                                td #{item.productInfo.newPrice}
-                                td 
-                                    input(
-                                        type="number"
-                                        name="quantity"
-                                        value=item.quantity
-                                        min="1"
-                                        product-id=item.productInfo.id
-                                        style="width: 60px"
-                                    )
-                                td #{item.totalPrice}
-                                td 
-                                    a(
-                                        href=`/cart/delete/${item.productInfo.id}`
-                                        class="btn btn-danger"
-                                    ) Xóa
+    else
+      .row
+        .col-12.text-center
+          .alert.alert-warning.py-4
+            h4.mb-0 Giỏ hàng của bạn đang trống!
+            p.mt-2
+              | Hãy thêm sản phẩm vào giỏ hàng để tiếp tục mua sắm. 
+              a(href="/product" class="text-primary") Xem sản phẩm ngay
 
-                    h3(class="text-right") Tổng đơn hàng: #{cartDetail.totalPrice}
-
-                div(class="text-right mt-3")
-                    a(href="/checkout" class="btn btn-success") THANH TOÁN
-
-    script(src="/js/cart.js") 
-
-
-        
+  script(src="/js/cart.js")

@@ -1,0 +1,64 @@
+mixin viewMember(roomChat, user)
+    #viewMembersModal.modal.fade(tabindex='-1' aria-labelledby='viewMembersModalLabel' aria-hidden='true')
+        .modal-dialog.modal-dialog-centered
+            .modal-content
+                .modal-header
+                    h5#viewMembersModalLabel.modal-title Danh sách thành viên
+                    button.btn-close(type='button' data-dismiss='modal' aria-label='Close') x
+                .modal-body
+                    .input-group.mb-3
+                        input.form-control(type='text' placeholder='Tìm kiếm thành viên...' aria-label='Tìm kiếm thành viên')
+                        button.btn.btn-outline-secondary(type='button')
+                            i.fa-solid.fa-search
+                    .member-list
+                        // Danh sách thành viên trong nhóm
+                        if roomChat.users && roomChat.users.length > 0
+                            each member in roomChat.users
+                                .member-item.d-flex.align-items-center.justify-content-between.p-2.border-bottom
+                                    .d-flex.align-items-center
+                                        .avatar.me-2
+                                            img.rounded-circle(src=member.infoMember.avatar alt='User Avatar' width='40' height='40')
+                                        .info
+                                            .name #{member.infoMember.fullName}
+                                            .status.small.text-muted #{member.infoMember.statusOnline=="online"?"Đang hoạt động" : "Không hoạt động"}
+                                    .role.text-muted
+                                        if member.role === 'superAdmin'
+                                            span.badge.bg-primary Quản trị viên - Người tạo nhóm
+                                        else if member.role === 'admin'
+                                            span.badge.bg-success Quản trị viên
+                        else
+                            p.text-center.text-muted Không có thành viên trong nhóm
+                .modal-footer
+                    button.btn.btn-secondary(type='button' data-dismiss='modal') Đóng
+
+mixin addMember(roomChat)
+    #addMemberModal.modal.fade(tabindex='-1' aria-labelledby='addMemberModalLabel' aria-hidden='true')
+        .modal-dialog.modal-dialog-centered
+            .modal-content
+                .modal-header
+                    h5#addMemberModalLabel.modal-title Thêm thành viên
+                    button.close(type='button' data-dismiss='modal' aria-label='Close')
+                        span(aria-hidden='true') &times;
+                .modal-body
+                    .input-group.mb-3
+                        input.form-control(type='text' placeholder='Tìm kiếm thành viên...' aria-label='Tìm kiếm thành viên')
+                        .input-group-append
+                            button.btn.btn-outline-secondary(type='button') 
+                                i.fa-solid.fa-search
+                    .member-list
+                        // Danh sách thành viên có thể thêm
+                        if roomChat.userNotMember && roomChat.userNotMember.length> 0
+                            each user in roomChat.userNotMember
+                                .member-item.d-flex.align-items-center.justify-content-between.p-2.border-bottom
+                                    .d-flex.align-items-center
+                                        .avatar.me-2
+                                            img.rounded-circle(src=user.avatar alt='User Avatar' width='40' height='40')
+                                        .info
+                                            .name #{user.fullName}
+                                            .status.small.text-muted #{user.statusOnline=="online"?"Đang hoạt động" : "Hoạt động hơn 1 giờ trước"}
+                                    .action
+                                        button.btn.btn-sm.btn-primary.add-member-btn(data-user-id=user.id) Thêm
+                        else
+                            p.text-center.text-muted Không có thành viên có thể thêm
+                .modal-footer
+                    button.btn.btn-secondary(type='button' data-dismiss='modal') Đóng
