@@ -1,0 +1,109 @@
+extends ../../layouts/default.pug
+
+block main
+    
+    // Giới thiệu
+    .container.py-5
+        .row.align-items-center
+            .col-md-6.mb-4.mb-md-0
+                h2.text-primary Giới thiệu về chúng tôi
+                p.text-muted Chúng tôi là một công ty chuyên cung cấp các thiết bị tập gym chất lượng, đến từ các nhà cung cấp uy tín hàng đầu thế giới
+                p.text-muted Với đội ngũ chuyên nghiệp và đam mê, chúng tôi không ngừng cải tiến để đáp ứng nhu cầu ngày càng cao của khách hàng.
+            .col-md-6
+                img.rounded.shadow(
+                src="https://img.freepik.com/free-psd/gym-fitness-facebook-cover-banner-template_106176-3895.jpg?semt=ais_hybrid&w=740"
+                alt="Giới thiệu"
+                style="width: 100%; height: auto;"
+                )
+
+    // Sứ mệnh và Tầm nhìn
+    .bg-light.py-5
+        .container
+            .row
+                .col-md-6.mb-4.mb-md-0
+                    .card.border-0.shadow-sm
+                        .card-body.text-center
+                            h3.text-primary Sứ mệnh
+                            p.text-muted Chúng tôi cam kết cung cấp các sản phẩm và dịch vụ tốt nhất, giúp khách hàng có những trải nghiệm mua sắm tuyệt vời và đáng tin cậy.
+                            i.fas.fa-rocket.fa-2x.text-primary.mt-3
+                .col-md-6
+                    .card.border-0.shadow-sm
+                        .card-body.text-center
+                            h3.text-primary Tầm nhìn
+                            p.text-muted Trở thành nơi cung cấp thiết bị gym hàng đầu tại Việt Nam, mang đến giá trị bền vững cho cộng đồng và đối tác.
+                            i.fas.fa-eye.fa-2x.text-primary.mt-3
+
+    // Đội ngũ
+    .container.py-5
+        h2.text-center.text-primary.mb-5 Đội ngũ của chúng tôi
+        .row
+            each member in team
+                .col-md-4.mb-4
+                    .card.border-0.shadow-sm.team-card
+                        img.card-img-top.rounded-circle(
+                            src=member.avatar
+                            alt=member.name
+                            style="width: 150px; height: 150px; object-fit: cover; margin: 20px auto;"
+                            )
+                        .card-body.text-center
+                            h5.card-title= member.name
+                            p.card-text.text-muted= member.role
+                                .social-links.mt-3
+                                    a(href="#", class="text-primary mr-2")
+                                        i.fab.fa-facebook-f
+                                    a(href="#", class="text-primary mr-2")
+                                        i.fab.fa-linkedin-in
+                                    a(href="#", class="text-primary")
+                                        i.fab.fa-twitter
+
+    // Liên hệ
+    .bg-light.py-5
+        .container
+            h2.text-center.text-primary.mb-5 Liên hệ với chúng tôi
+            .row
+                .col-md-6.mb-4.mb-md-0
+                    .card.border-0.shadow-sm
+                        .card-body
+                            h5.card-title Thông tin liên hệ
+                            p.text-muted
+                                i.fas.fa-map-marker-alt.mr-2.text-primary
+                                | #{setting.address}
+                            p.text-muted
+                                i.fas.fa-phone-alt.mr-2.text-primary
+                                | #{setting.phone}
+                            p.text-muted
+                                i.fas.fa-envelope.mr-2.text-primary
+                                | #{setting.email}
+                .col-md-6
+                    .card.border-0.shadow-sm
+                        .card-body
+                            h5.card-title Gửi tin nhắn
+                            form
+                                .form-group.mb-3
+                                    label(for="name") Họ và tên
+                                    input(
+                                        type="text"
+                                        class="form-control shadow-sm"
+                                        id="name"
+                                        placeholder="Nhập họ và tên"
+                                    )
+                                .form-group.mb-3
+                                    label(for="email") Email
+                                    input(
+                                        type="email"
+                                        class="form-control shadow-sm"
+                                        id="email"
+                                        placeholder="Nhập email"
+                                    )
+                                .form-group.mb-3
+                                    label(for="message") Tin nhắn
+                                    textarea(
+                                        class="form-control shadow-sm"
+                                        id="message"
+                                        rows="4"
+                                        placeholder="Nhập tin nhắn của bạn"
+                                    )
+                                button(
+                                    type="submit"
+                                    class="btn btn-primary btn-block"
+                                    ) Gửi

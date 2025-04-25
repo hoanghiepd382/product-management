@@ -1,8 +1,152 @@
 extends ../../layouts/default.pug
 
 block main
-    h1 Trang tổng quan
+   .container.py-5
+    h1.mb-4 #{pageTitle}
 
-    div #{user}
-    div --------
-    div #{role}
+    // Doanh thu
+    .row.mb-4
+      .col-md-6
+        .card.border-0.shadow-sm
+          .card-body
+            h5.card-title Doanh thu
+            p.card-text.text-muted Tổng doanh thu
+            h3.text-primary #{totalRevenue ? Number(totalRevenue).toLocaleString('vi-VN') : '0'}đ
+            p.text-muted.small Cập nhật: #{new Date().toLocaleDateString('vi-VN')}
+
+    // Sản phẩm, Danh mục sản phẩm và Bài viết
+    .row.mb-4
+      .col-md-6.mb-4.mb-md-0
+        .card.border-0.shadow-sm
+          .card-body
+            h5.card-title Sản phẩm
+            .d-flex.align-items-center.mb-3
+              .flex-grow-1
+                p.card-text.text-muted Tổng số sản phẩm
+                h3.text-success #{objectProduct.totalProduct || '0'}
+              .flex-grow-1
+                p.card-text.text-muted Đang bán
+                h3.text-warning #{objectProduct.totalProductActive || '0'}
+              .flex-grow-1
+                p.card-text.text-muted Ngừng bán
+                h3.text-warning #{objectProduct.totalProductInactive || '0'}
+            hr
+            h6.text-muted Sản phẩm bán chạy nhất
+            if objectProduct.topSaleProduct
+              .d-flex.align-items-center.mt-3
+                img.rounded.mr-3(
+                  src=objectProduct.topSaleProduct.thumbnail,
+                  alt=objectProduct.topSaleProduct.title,
+                  style="width: 60px; height: 60px; object-fit: cover;"
+                )
+                .flex-grow-1
+                  p.mb-1.font-weight-bold= objectProduct.topSaleProduct.title
+                  p.text-muted.small Đã bán: #{objectProduct.topSaleProduct.sales.toLocaleString()}
+            else
+              p.text-muted Chưa có sản phẩm bán chạy
+            hr
+            h6.text-muted Sản phẩm được yêu thích nhất
+            if objectProduct.topRateProduct
+              .d-flex.align-items-center.mt-3
+                img.rounded.mr-3(
+                  src=objectProduct.topRateProduct.thumbnail,
+                  alt=objectProduct.topRateProduct.title,
+                  style="width: 60px; height: 60px; object-fit: cover;"
+                )
+                .flex-grow-1
+                  p.mb-1.font-weight-bold= objectProduct.topRateProduct.title
+                  p.text-muted.small Đánh giá: #{objectProduct.topRateProduct.averageRating.toFixed(1)} sao
+                  p.text-muted.small Lượt đánh giá: #{objectProduct.topRateProduct.totalReviews} 
+                    i.fas.fa-star.text-warning.ml-1
+            else
+              p.text-muted Chưa có sản phẩm được yêu thích
+
+      .col-md-6
+        // Danh mục sản phẩm
+        .card.border-0.shadow-sm.mb-4
+          .card-body
+            h5.card-title Danh mục sản phẩm
+            .d-flex.align-items-center.mb-3
+              .flex-grow-1
+                p.card-text.text-muted Tổng số danh mục
+                h3.text-orange #{objectProductCategory.totalProductCategory || '0'}
+              .flex-grow-1
+                p.card-text.text-muted Đang hoạt động
+                h3.text-success #{objectProductCategory.totalProductCategoryActive || '0'}
+              .flex-grow-1
+                p.card-text.text-muted Dừng hoạt động
+                h3.text-danger #{objectProductCategory.totalProductCategoryInactive || '0'}
+
+        // Bài viết
+        .card.border-0.shadow-sm
+          .card-body
+            h5.card-title Bài viết
+            .d-flex.align-items-center.mb-3
+              .flex-grow-1
+                p.card-text.text-muted Tổng số bài viết
+                h3.text-teal #{objectBlog.totalBlog || '0'}
+              .flex-grow-1
+                p.card-text.text-muted Đang hiển thị
+                h3.text-success #{objectBlog.totalBlogDisplay || '0'}
+              .flex-grow-1
+                p.card-text.text-muted Ẩn
+                h3.text-danger #{objectBlog.totalBlogHidden || '0'}
+              .flex-grow-1
+                p.card-text.text-muted Danh mục
+                h3.text-danger #{objectBlog.totalBlogCategory || '0'}
+          
+            hr
+            h6.text-muted Bài viết được đọc nhiều nhất
+            if objectBlog.topViewBlog
+              .d-flex.align-items-center.mt-3
+                img.rounded.mr-3(
+                  src=objectBlog.topViewBlog.thumbnail,
+                  alt=objectBlog.topViewBlog.title,
+                  style="width: 60px; height: 60px; object-fit: cover;"
+                )
+                .flex-grow-1
+                  p.mb-1.font-weight-bold= objectBlog.topViewBlog.title
+                  p.text-muted.small Lượt xem: #{objectBlog.topViewBlog.views.toLocaleString()}
+            else
+              p.text-muted Chưa có bài viết nào
+
+    // Tài khoản admin và Tài khoản user
+    .row.mb-4
+      .col-md-6.mb-4.mb-md-0
+        .card.border-0.shadow-sm
+          .card-body
+            h5.card-title Tài khoản admin
+            .d-flex.align-items-center.mb-3
+              .flex-grow-1
+                p.card-text.text-muted Tổng số tài khoản
+                h3.text-purple #{objectAccount.totalAccount || '0'}
+              .flex-grow-1
+                p.card-text.text-muted Đang hoạt động
+                h3.text-success #{objectAccount.totalAccountActive || '0'}
+              .flex-grow-1
+                p.card-text.text-muted Bị khóa
+                h3.text-danger #{objectAccount.totalAccountInactive || '0'}
+            hr
+            h6.text-muted Số lượng tài khoản theo quyền
+            .d-flex.align-items-center.mb-3
+              .flex-grow-1
+                p.card-text.text-muted Quản trị viên
+                h3.text-purple #{totalAdmins || '1'}
+              .flex-grow-1
+                p.card-text.text-muted Quản lý bài viết
+                h3.text-purple #{activeAdmins || '1'}
+              
+      .col-md-6
+        .card.border-0.shadow-sm
+          .card-body
+            h5.card-title Tài khoản user
+            .d-flex.align-items-center.mb-3
+              .flex-grow-1
+                p.card-text.text-muted Tổng số tài khoản
+                h3.text-purple #{objectUser.totalUser || '0'}
+              .flex-grow-1
+                p.card-text.text-muted Đang hoạt động
+                h3.text-success #{objectUser.totalUserActive || '0'}
+              .flex-grow-1
+                p.card-text.text-muted Bị khóa
+                h3.text-danger #{objectUser.totalUserInactive || '0'}

@@ -28,10 +28,9 @@ block main
                                     img(src=item.productInfo.thumbnail, alt=item.productInfo.title width="80px")
                                 td 
                                     a(href=`/product/detail/${item.productInfo.slug}`) #{item.productInfo.title}
-                                td #{item.productInfo.newPrice}
-                                td #{item.quantity}
-                                    
-                                td #{item.totalPrice}
+                                td #{Number(item.productInfo.newPrice).toLocaleString('vi-VN')}
+                                td #{item.quantity}                                   
+                                td #{item.totalPrice.toLocaleString('vi-VN')}
                                 
 
                 h3.text-right Tổng đơn hàng: #{cartDetail.totalPrice.toLocaleString('vi-VN')} VND
@@ -52,7 +51,7 @@ block main
                                         class="form-control"
                                         id="fullName"
                                         name="fullName"
-                                        value=userBuy.fullName
+                                        value=(userBuy && userBuy.fullName)? userBuy.fullName: "" 
                                         required
                                     )
                                 div(class="form-group")
@@ -62,7 +61,7 @@ block main
                                         class="form-control"
                                         id="phone"
                                         name="phone"
-                                        value=userBuy.phone
+                                        value=(userBuy && userBuy.phone)? userBuy.phone: "" 
                                         required
                                     )
                                 div(class="form-group")
@@ -72,7 +71,7 @@ block main
                                         class="form-control"
                                         id="address"
                                         name="address"
-                                        value=userBuy.address
+                                        value=(userBuy && userBuy.address)? userBuy.address: "" 
                                         required
                                     )
 

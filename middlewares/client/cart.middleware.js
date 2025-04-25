@@ -4,7 +4,8 @@ const User = require("../../models/user.model");
 
 
 module.exports.cartId = async (req, res, next) =>{
-   if (!req.cookies.cartId){
+  try {
+    if (!req.cookies.cartId){
         const newCart = new Cart();
         newCart.save();
         res.cookie("cartId", newCart.id,{
@@ -21,4 +22,9 @@ module.exports.cartId = async (req, res, next) =>{
     
    }
     next();
+  } catch (error) {
+    console.log(error);
+    res.redirect("/");
+    return;
+  }
 }

@@ -12,7 +12,7 @@ const flash = require('express-flash');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const moment = require("moment");
-
+const passport = require("./config/passport");
 
 require('dotenv').config();
 
@@ -41,6 +41,9 @@ app.use('/tinymce', express.static(path.join(__dirname, 'node_modules', 'tinymce
 
 app.use(express.static(`${__dirname}/public`));
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.json());
+
+app.use(passport.initialize());
 
 route(app);
 routeAdmin(app);

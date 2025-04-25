@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const generateHepler = require("../helpers/generate");
+const jwt = require('jsonwebtoken');
 
 const userSchema = new mongoose.Schema({
     fullName: String,
@@ -27,14 +27,30 @@ const userSchema = new mongoose.Schema({
         default: "active"
     },
     statusOnline : String,
+    googleId: String,
+    facebookId: String,
     tokenUser: {
         type: String,
-        default: generateHepler.generateRandomString(20) 
-}
+        default: null
+    }
 },
 {
     timestamps: true
-})
+});
+
+userSchema.methods.generateToken = function () {
+    return jwt.sign(
+        { id: this._id, email: this.email },
+        process.env.JWT_SECRET,
+        { expiresIn: '1d' } 
+    );
+};
+userSchema.post('save', async function (doc) {
+    if (!doc.tokenUser) {
+        doc.tokenUser = doc.generateToken();
+        await doc.save();
+    }
+});
 
 const User = mongoose.model("User", userSchema, "users");
 module.exports = User;

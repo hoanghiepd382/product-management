@@ -1,0 +1,132 @@
+extends ../../layouts/default.pug
+include ../../mixins/flash.pug
+
+block main 
+  .container.py-5
+    h1.mb-4.text-primary #{pageTitle}
+
+    // Flash messages
+    .mb-4
+      +flashError(5000)
+      +flashSuccess(5000)
+
+    // Form cài đặt
+    .card.shadow-sm.border-0
+      .card-body
+        form(
+          action=`${prefixAdmin}/settings/general?_method=PATCH`
+          method="POST"
+          enctype="multipart/form-data"
+          id="form-create-product"
+        )
+          // Thông tin website
+          h5.mb-3.text-muted Thông tin website
+          .form-group.mb-4
+            label(for="websiteName") Tên Website
+            input(
+              type="text"
+              class="form-control shadow-sm"
+              id="websiteName"
+              name="websiteName"
+              required
+              value=setting.websiteName
+            )  
+          .form-group.mb-4(upload-image)
+            label(for="logo") Logo
+            .d-flex.align-items-center
+              input(
+                type="file"
+                class="form-control shadow-sm"
+                id="logo"
+                name="logo" 
+                accept="image/*"
+                upload-image-input              
+              ) 
+            .image-preview-container.mt-2.position-relative
+              img.rounded(
+                src=setting.logo
+                upload-preview
+                style="max-width: 100px; max-height: 100px; object-fit: cover;"
+              )
+              span.delete-preview.text-danger.cursor-pointer ×      
+          // Thông tin liên hệ
+          h5.mb-3.text-muted Thông tin liên hệ
+          .form-group.mb-4
+            label(for="phone") Số điện thoại
+            input(
+              type="text"
+              class="form-control shadow-sm"
+              id="phone"
+              name="phone" 
+              value=setting.phone              
+            ) 
+          .form-group.mb-4
+            label(for="email") Email
+            input(
+              type="email"
+              class="form-control shadow-sm"
+              id="email"
+              name="email"   
+              value=setting.email              
+            ) 
+          .form-group.mb-4
+            label(for="address") Địa chỉ
+            input(
+              type="text"
+              class="form-control shadow-sm"
+              id="address"
+              name="address"  
+              value=setting.address               
+            ) 
+
+          // Mạng xã hội
+          h5.mb-3.text-muted Mạng xã hội
+          .form-group.mb-4
+            label(for="facebook") Facebook
+            input(
+              type="text"
+              class="form-control shadow-sm"
+              id="facebook"
+              name="facebook"  
+              value=setting.facebook               
+            ) 
+          .form-group.mb-4
+            label(for="zalo") Zalo
+            input(
+              type="text"
+              class="form-control shadow-sm"
+              id="zalo"
+              name="zalo"   
+              value=setting.zalo              
+            ) 
+          .form-group.mb-4
+            label(for="tiktok") Tiktok
+            input(
+              type="text"
+              class="form-control shadow-sm"
+              id="tiktok"
+              name="tiktok"  
+              value=setting.tiktok               
+            ) 
+
+          // Copyright
+          h5.mb-3.text-muted Copyright
+          .form-group.mb-4
+            label(for="copyright") Copyright
+            input(
+              type="text"
+              class="form-control shadow-sm"
+              id="copyright"
+              name="copyright"  
+              value=setting.copyright               
+            ) 
+
+          // Nút Cập nhật
+          .form-group.text-center.mt-4
+            button(
+              type="submit"
+              class="btn btn-primary btn-lg px-5"
+            ) Cập nhật
+
+
+    script(src="/admin/js/product.js")

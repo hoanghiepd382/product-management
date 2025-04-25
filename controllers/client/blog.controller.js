@@ -83,6 +83,13 @@ module.exports.detail = async (req, res)=>{
     const blog = await Blog.findOne({
         slug: slugBlog
     });
+    const newViews = blog.views + 1;
+    await Blog.updateOne({
+        slug: slugBlog
+    },{
+        views: newViews
+    });
+    
     const category = await blogCategory.findOne({
         _id: blog.blog_category_id,
         deleted: false,

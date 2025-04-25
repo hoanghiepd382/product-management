@@ -23,6 +23,10 @@ const blogSchema = new mongoose.Schema({
     status: String,
     featured: String,
     position: String,
+    views: {
+        type:Number,
+        default: 0
+    },
     writedBy: {
         account_id: String,
         writedAt: {

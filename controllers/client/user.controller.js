@@ -1,9 +1,14 @@
 const User = require("../../models/user.model");
 const Cart = require("../../models/cart.model");
+const Order = require("../../models/order.model");
+const Product = require("../../models/product.model");
+const Review = require("../../models/review.model");
 const ForgotPassword = require("../../models/forgot-password.model");
 const md5 = require("md5");
 const generateOTP = require("../../helpers/generate");
 const sendMailHelper = require("../../helpers/sendMail");
+const passport = require("passport");
+const newPriceProductHelper = require("../../helpers/newPriceProduct");
 
 
 
@@ -68,7 +73,14 @@ module.exports.loginPost = async (req, res) =>{
         res.redirect("back");
         return;
     }
-    res.cookie("tokenUser", user.tokenUser);
+    
+    user.tokenUser = user.generateToken();
+    await user.save();
+    res.cookie('tokenUser', user.tokenUser, {
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000, 
+      });
+
     const cart = await Cart.findOne({
         user_id: user.id
     });
@@ -91,6 +103,69 @@ module.exports.loginPost = async (req, res) =>{
     res.redirect("/");
 }
 
+module.exports.callbackGoogle = async (req, res) => {
+    try {
+        res.cookie("oldCartId", req.cookies.cartId );
+        const user = req.user;
+        user.tokenUser = user.generateToken();
+        await user.save();
+
+        res.cookie('tokenUser', user.tokenUser, {
+            httpOnly: true,
+            maxAge: 24 * 60 * 60 * 1000, 
+        });
+        const cart = await Cart.findOne({
+            user_id: user.id
+        });
+        if (cart){
+            res.cookie("cartId", cart.id);
+        }
+        else{
+            const newCart = new Cart({user_id: user.id});
+            newCart.save();
+            res.cookie("cartId", newCart.id);
+        }    
+        res.redirect('/');
+    } catch (err) {
+        console.error('Lỗi callback Google:', err);
+        res.render('client/pages/user/login', {
+            error: 'Có lỗi xảy ra khi đăng nhập bằng Google',
+            pageTitle: 'Đăng nhập'
+        });
+    } 
+}
+
+module.exports.callbackFacebook = async (req, res)=>{
+    try {
+        res.cookie("oldCartId", req.cookies.cartId );
+        const user = req.user;
+        user.tokenUser = user.generateToken();
+        await user.save();
+
+        res.cookie('tokenUser', user.tokenUser, {
+            httpOnly: true,
+            maxAge: 24 * 60 * 60 * 1000, 
+        });
+        const cart = await Cart.findOne({
+            user_id: user.id
+        });
+        if (cart){
+            res.cookie("cartId", cart.id);
+        }
+        else{
+            const newCart = new Cart({user_id: user.id});
+            newCart.save();
+            res.cookie("cartId", newCart.id);
+        }    
+        res.redirect('/');
+    } catch (err) {
+        console.error('Lỗi callback Facebook:', err);
+        res.render('client/pages/user/login', {
+            error: 'Có lỗi xảy ra khi đăng nhập bằng Facebook',
+            pageTitle: 'Đăng nhập'
+        });
+    } 
+}
 module.exports.logout = async (req, res) =>{
     await User.updateOne({
         tokenUser: req.cookies.tokenUser
@@ -218,4 +293,32 @@ module.exports.infoPatch = async (req, res) =>{
     await User.updateOne({_id: user.id}, req.body);
     req.flash("success", "Cập nhật thành công");
     res.redirect("back");
+}
+
+module.exports.historyOrder = async (req, res) =>{
+    try {
+        const user = await User.findOne({
+            tokenUser: req.cookies.tokenUser
+        });
+        const order = await Order.findOne({
+            userId: user.id
+        });
+        if (order){
+            for (const product of order.products) {
+                const productInfo = await Product.findOne({
+                    _id: product.product_id,
+                    deleted: false
+                });
+                newPriceProductHelper.newPriceDetailProduct(productInfo);
+                product.infoProduct = productInfo;
+                product.totalPrice = productInfo.newPrice * product.quantity;
+            }
+            res.render("client/pages/user/history-order", {
+                pageTitle: "Lịch sử mua hàng",
+                order: order
+            })
+        }
+    } catch (error) {
+        
+    }
 }

@@ -41,7 +41,19 @@ const productSchema = new mongoose.Schema({
             account_id: String,
             updateAt: Date
         }
-    ]
+    ],
+    averageRating: {
+        type: Number,
+        default: 0
+    },
+    totalReviews: {
+        type: Number,
+        default: 0
+    },
+    sales: {
+        type: Number,
+        default: 0
+    }
 },
 {
     timestamps: true

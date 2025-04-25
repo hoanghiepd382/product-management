@@ -13,12 +13,14 @@ const usersRoutes = require("./users.route");
 const roomsChatRoutes = require("./rooms-chat.route");
 const authMiddleware = require("../../middlewares/client/auth.middleware");
 const blogRoutes = require("./blog.route");
-
+const settingMiddleware = require("../../middlewares/client/setting.middleware");
+const aboutRoutes = require("./about.route");
 
 module.exports = (app)=>{
     app.use(productCategoryMiddleware.productCategory);
     app.use(cartMiddleware.cartId);
     app.use(userMiddleware.user);
+    app.use(settingMiddleware.settingGeneral);
 
     app.use("/", homeRoutes);
     app.use("/product", header.searchForm, productRoutes);
@@ -30,6 +32,6 @@ module.exports = (app)=>{
     app.use("/users", authMiddleware.requireAuth, usersRoutes);
     app.use("/rooms-chat", roomsChatRoutes);
     app.use("/blog", blogRoutes);
-
+    app.use("/about", aboutRoutes);
 
 }

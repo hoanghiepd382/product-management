@@ -1,13 +1,29 @@
-mixin product-item (item)
-    .col-6.col-md-4.col-lg-3.mb-3 
-        .product-item 
-            .inner-image
-                img(src=item.thumbnail, alt=item.title)
-                if (item.featured == "1")
-                    .inner-featured Nổi bật
-                .inner-content
-                    h3.inner-title
-                        a(href=`/product/detail/${item.slug}`) #{item.title} 
-                    .inner-price-new #{Number(item.newPrice).toLocaleString('vi-VN')}đ
-                    .inner-price-old #{Number(item.price).toLocaleString('vi-VN')}đ
-                    .inner-discount #{item.discountPercentage}%
+mixin product-item(item)
+  .col-6.col-md-4.col-lg-3.mb-3 
+    .product-item 
+      .inner-image
+        img(src=item.thumbnail, alt=item.title)
+        if (item.featured == "1")
+          .inner-featured Nổi bật
+      .inner-content
+        h3.inner-title
+          a(href=`/product/detail/${item.slug}`) #{item.title} 
+        .inner-price.d-flex.align-items-center.mb-1
+          .inner-price-new.font-weight-bold #{Number(item.newPrice).toLocaleString('vi-VN')}đ
+        .inner-price-old.d-flex.align-items-center.mb-1
+          span.text-muted(style="text-decoration: line-through;") #{Number(item.price).toLocaleString('vi-VN')}đ
+          if (item.discountPercentage > 0)
+            span.badge.badge-warning.ml-2 -#{item.discountPercentage}%
+        .inner-rating-sales.d-flex.align-items-center.mb-1
+          if (item.averageRating && item.averageRating > 0)
+            span.d-flex.align-items-center.mr-2
+              i.fas.fa-star.text-warning.mr-1
+              span #{item.averageRating.toFixed(1)}
+          if (item.sales && item.sales > 0)
+            if (item.sales >= 1000)
+              span Đã bán #{(item.sales / 1000).toFixed(1)}K
+            else
+              span Đã bán #{item.sales}
+          else
+            span Chưa có lượt bán nào
+        

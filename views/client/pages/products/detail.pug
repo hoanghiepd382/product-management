@@ -1,57 +1,115 @@
 extends ../../layouts/default.pug
 include ../../mixins/box-head.pug
+include ../../mixins/flash.pug
 
-block main 
+block main
+    +flashError(3000)
+    +flashSuccess(3000)
+    
     .product-detail
         .container.my-5
-            .row 
-                .col-6 
+            .row
+                .col-6
                     .inner-thumb
-                        img(src=product.thumbnail alt=product.tile)
-                .col-6  
-                    h1(class="inner-title") #{product.title}         
+                        img(src=product.thumbnail, alt=product.title)
+                .col-6
+                    h1.inner-title #{product.title}
 
-                    if (product.category)
-                        div(class="inner-category")
-                            span Danh mục: 
+                    if product.category
+                        .inner-category
+                            span Danh mục:
                             a(href=`/product/${product.category.slug}`) #{product.category.title}
 
-                    if (product.newPrice)
-                        div(class="inner-price-new") #{Number(product.newPrice).toLocaleString('vi-VN')}đ
+                    if product.newPrice
+                        .inner-price-new #{Number(product.newPrice).toLocaleString('vi-VN')}đ
 
-                    if (product.price)
-                        div(class="inner-price-old") #{product.price.toLocaleString('vi-VN')}đ
+                    if product.price
+                        .inner-price-old #{product.price.toLocaleString('vi-VN')}đ
 
-                    if (product.discountPercentage)
-                        div(class="inner-percent") Giảm tới:  <span>#{product.discountPercentage}%</span> 
+                    if product.discountPercentage
+                        .inner-percent
+                            | Giảm tới: 
+                            span #{product.discountPercentage}%
 
-                    if (product.stock)
-                        div(class="inner-stock") Còn lại:  <span>#{product.stock}</span> sản phẩm
+                    if product.stock
+                        .inner-stock
+                            | Tình trạng:  
+                            span Còn hàng
 
-                    form(
-                        action=`/cart/add/${product.id}`
-                        method="POST"
-                    )
-                        input(
-                            class="form-control mb-2"
-                            type="number"
-                            name="quantity"
-                            value="1"
-                            min="1"
+                    form(action=`/cart/add/${product.id}`, method="POST")
+                        input.form-control.mb-2(
+                            type="number", 
+                            name="quantity", 
+                            value="1", 
+                            min="1", 
                             max=product.stock
                         )
-                        button(
-                            type="submit"
-                            class="btn btn-success btn-block"
-                        ) Thêm vào giỏ hàng
+                        button.btn.btn-success.btn-block(type="submit") Thêm vào giỏ hàng
 
-        hr
-
-
-        .container.my-5          
+        .container.my-5
             .row
                 .col-12
                     +box-head("Mô tả sản phẩm")
                     .inner-desc !{product.description}
-                    
-                    
+
+        .container.my-5
+            .row
+                .col-12
+                    +box-head("Đánh giá sản phẩm")
+                    .card.border-0.shadow-sm.p-4
+
+                        // Điểm trung bình và số lượng đánh giá
+                        .mb-4
+                            h5
+                                | Điểm trung bình: 
+                                span.text-warning= product.averageRating.toFixed(1) + '/5'
+                                span.text-muted (#{product.totalReviews} đánh giá)
+
+                            if user
+                                form#review-form(action=`/product/${product.slug}/review`, method="POST")
+                                    .row.mb-3
+                                        .col-md-6.mb-3.mb-md-0
+                                            label.form-label(for="star") Đánh giá của bạn
+                                            .star-rating.mb-2
+                                                - for (let i = 1; i <=5; i++)
+                                                    span.fa.fa-star.star(
+                                                        data-value=i,
+                                                        class=(i <= 0 ? 'text-warning' : 'text-muted')
+                                                    )
+                                            input(type="hidden", name="star", id="star", value="0", required)
+                                        
+                                        .col-md-12
+                                            label.form-label(for="comment") Bình luận
+                                            textarea.form-control.rounded(
+                                                name="comment",
+                                                id="comment",
+                                                rows="3",
+                                                placeholder="Nhập bình luận của bạn"
+                                            )
+                                    button.btn.btn-primary.rounded-pill(type="submit") Gửi đánh giá
+                            else
+                                p.text-muted.mt-2
+                                    | Vui lòng 
+                                    a.text-primary(href="/user/login") đăng nhập 
+                                    | để đánh giá sản phẩm.
+
+                        // Danh sách đánh giá
+                        h5.mt-4 Tất cả đánh giá
+                        if reviews && reviews.length > 0
+                            each review in reviews
+                                .card.mb-3.border-0.shadow-sm
+                                    .card-body
+                                        .d-flex.align-items-center.mb-2
+                                            .mr-3
+                                                strong= review.infoUser.fullName
+                                            .text-muted.small=moment(review.createdAt).format("DD/MM/YYYY")
+                                        .d-flex.align-items-center.mb-2
+                                            - for (let i = 0; i < 5; i++)
+                                                if i < review.star
+                                                    i.fa.fa-star.text-warning.mr-1
+                                                else
+                                                    i.fa.fa-star.text-muted.mr-1
+                                        if review.comment
+                                            p.text-muted= review.comment
+                        else
+                            p.text-muted Chưa có đánh giá nào cho sản phẩm này.

@@ -18,6 +18,7 @@ module.exports.index = async (req, res) => {
     const user = await User.findOne({
         tokenUser: req.cookies.tokenUser 
     }).select("fullName phone address");
+    console.log(user);
     const cart = await Cart.findOne({
         _id: req.cookies.cartId
     });
@@ -113,7 +114,13 @@ module.exports.success = async (req, res) =>{
         const productInCart = cart.products.find(p => p.product_id === id);
         const quantity = productInCart.quantity;
 
-        const product = await Product.findOne({ _id: id }).select("price discountPercentage");
+        const product = await Product.findOne({ _id: id }).select("price discountPercentage sales");
+        const totalSale = product.sales + quantity;
+        await Product.updateOne({
+            _id: id
+        },{
+            sales: totalSale
+        })
         const productData = {
             product_id: id,
             price: product.price,
